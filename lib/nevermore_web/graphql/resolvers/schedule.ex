@@ -1,6 +1,5 @@
 defmodule NevermoreWeb.Resolvers.Schedule do
   import Ecto.Query, only: [from: 2]
-  import NevermoreWeb.GraphQL.Helpers
 
   def list_schedules(_parent, args, _resolution) do
     query = from Nevermore.Schedule, where: ^Map.to_list(args)

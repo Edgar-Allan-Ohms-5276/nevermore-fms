@@ -8,10 +8,11 @@ defmodule NevermoreWeb.Resolvers.ScheduledMatch do
   end
 
   def create_scheduled_match(_parent, args, _resolution) do
-    changeset = Nevermore.ScheduledMatch.changeset(%Nevermore.ScheduledMatch{}, args)
-    |> put_assoc(Nevermore.Schedule, :schedule, args)
-    |> put_assoc(Nevermore.Alliance, :red_station, args)
-    |> put_assoc(Nevermore.Alliance, :blue_station, args)
+    changeset =
+      Nevermore.ScheduledMatch.changeset(%Nevermore.ScheduledMatch{}, args)
+      |> put_assoc(Nevermore.Schedule, :schedule, args)
+      |> put_assoc(Nevermore.Alliance, :red_station, args)
+      |> put_assoc(Nevermore.Alliance, :blue_station, args)
 
     Nevermore.Repo.insert(changeset)
   end
@@ -20,10 +21,11 @@ defmodule NevermoreWeb.Resolvers.ScheduledMatch do
     doc = Nevermore.Repo.get(Nevermore.ScheduledMatch, args.id)
 
     if doc != nil do
-      changeset = Nevermore.ScheduledMatch.changeset(doc, args)
-      |> put_assoc(Nevermore.Schedule, :schedule, args)
-      |> put_assoc(Nevermore.Alliance, :red_station, args)
-      |> put_assoc(Nevermore.Alliance, :blue_station, args)
+      changeset =
+        Nevermore.ScheduledMatch.changeset(doc, args)
+        |> put_assoc(Nevermore.Schedule, :schedule, args)
+        |> put_assoc(Nevermore.Alliance, :red_station, args)
+        |> put_assoc(Nevermore.Alliance, :blue_station, args)
 
       Nevermore.Repo.update(changeset)
     else

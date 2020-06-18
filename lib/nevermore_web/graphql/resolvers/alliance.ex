@@ -1,6 +1,5 @@
 defmodule NevermoreWeb.Resolvers.Alliance do
   import Ecto.Query, only: [from: 2]
-  import NevermoreWeb.GraphQL.Helpers
 
   def list_alliances(_parent, args, _resolution) do
     query = from Nevermore.Alliance, where: ^Map.to_list(args)

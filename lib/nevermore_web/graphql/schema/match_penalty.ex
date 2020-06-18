@@ -20,15 +20,15 @@ defmodule NevermoreWeb.Schema.MatchPenalty do
   object :match_penalty_queries do
     @desc "Retrieves all match penalties within the DB, based on the arguments."
     field :match_penalties, list_of(:match_penalty) do
-      arg :id, :integer
-      arg :type, :string
-      arg :occurred_at, :datetime
-      arg :schedule, :integer
-      arg :scheduled_match, :integer
-      arg :match, :integer
-      arg :alliance, :integer
-      arg :inserted_at, :datetime
-      arg :updated_at, :datetime
+      arg(:id, :integer)
+      arg(:type, :string)
+      arg(:occurred_at, :datetime)
+      arg(:schedule, :integer)
+      arg(:scheduled_match, :integer)
+      arg(:match, :integer)
+      arg(:alliance, :integer)
+      arg(:inserted_at, :datetime)
+      arg(:updated_at, :datetime)
       resolve(handle_errors(&Resolvers.MatchPenalty.list_match_penalties/3))
     end
   end
@@ -39,36 +39,35 @@ defmodule NevermoreWeb.Schema.MatchPenalty do
     # ------------------------------------------------------------------------------------------------------
     @desc "Creates a new match penalty."
     field :create_match_penalty, type: :match_penalty do
-      arg :type, :string
-      arg :occurred_at, :datetime
-      arg :schedule, :integer
-      arg :scheduled_match, :integer
-      arg :match, :integer
-      arg :alliance, :integer
-      arg :inserted_at, :datetime
-      arg :updated_at, :datetime
+      arg(:type, :string)
+      arg(:occurred_at, :datetime)
+      arg(:schedule, :integer)
+      arg(:scheduled_match, :integer)
+      arg(:match, :integer)
+      arg(:alliance, :integer)
+      arg(:inserted_at, :datetime)
+      arg(:updated_at, :datetime)
       resolve(handle_errors(&Resolvers.MatchPenalty.create_match_penalty/3))
     end
 
     @desc "Updates a match penalty."
     field :update_match_penalty, type: :match_penalty do
-      arg :id, non_null(:integer)
-      arg :type, :string
-      arg :occurred_at, :datetime
-      arg :schedule, :integer
-      arg :scheduled_match, :integer
-      arg :match, :integer
-      arg :alliance, :integer
-      arg :inserted_at, :datetime
-      arg :updated_at, :datetime
+      arg(:id, non_null(:integer))
+      arg(:type, :string)
+      arg(:occurred_at, :datetime)
+      arg(:schedule, :integer)
+      arg(:scheduled_match, :integer)
+      arg(:match, :integer)
+      arg(:alliance, :integer)
+      arg(:inserted_at, :datetime)
+      arg(:updated_at, :datetime)
       resolve(handle_errors(&Resolvers.MatchPenalty.update_match_penalty/3))
     end
 
     @desc "Deletes a match penalty."
     field :delete_match_penalty, type: :match_penalty do
-      arg :id, non_null(:integer)
+      arg(:id, non_null(:integer))
       resolve(handle_errors(&Resolvers.MatchPenalty.delete_match_penalty/3))
     end
   end
-
 end

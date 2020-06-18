@@ -93,7 +93,7 @@ defmodule Nevermore.Field do
       {:ok, ds} = GenServer.start_link(Nevermore.Driverstation, {0, client, field})
       :gen_tcp.controlling_process(client, ds)
     catch
-      error -> nil
+      _ -> nil
     end
 
     loop_acceptor(socket, field)
@@ -108,7 +108,7 @@ defmodule Nevermore.Field do
   def handle_info(:retry_bind_udp, state) do
     socket =
       case :gen_udp.open(state.udp_port, [:list, ip: state.ip]) do
-        {:error, reason} ->
+        {:error, _} ->
           nil
 
         {:ok, socket} ->
@@ -354,7 +354,7 @@ defmodule Nevermore.Field do
   end
 
   def handle_info({:send_game_data_all, data}, state) do
-    Enum.each(state.alliance_station_to_driverstation, fn {stateion, driverstation} ->
+    Enum.each(state.alliance_station_to_driverstation, fn {_, driverstation} ->
       if driverstation != nil do
         send(driverstation, {:send_game_data, data})
       end
@@ -414,7 +414,7 @@ defmodule Nevermore.Field do
         end
       end
 
-    Enum.each(state.alliance_station_to_driverstation, fn {stateion, driverstation} ->
+    Enum.each(state.alliance_station_to_driverstation, fn {_, driverstation} ->
       if driverstation != nil do
         send(
           driverstation,
@@ -431,7 +431,7 @@ defmodule Nevermore.Field do
 
   defp all_driverstations_ready?(state) do
     try do
-      Enum.each(state.alliance_station_to_driverstation, fn {station, driverstation} ->
+      Enum.each(state.alliance_station_to_driverstation, fn {_, driverstation} ->
         if driverstation == nil do
           throw(:break)
         end

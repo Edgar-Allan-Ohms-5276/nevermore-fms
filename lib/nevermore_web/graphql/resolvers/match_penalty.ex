@@ -8,12 +8,14 @@ defmodule NevermoreWeb.Resolvers.MatchPenalty do
   end
 
   def create_match_penalty(_parent, args, _resolution) do
-    changeset = Nevermore.MatchPenalty.changeset(%Nevermore.MatchPenalty{}, args)
-    |> put_assoc(Nevermore.Schedule, :schedule, args)
-    |> put_assoc(Nevermore.ScheduledMatch, :scheduled_match, args)
-    |> put_assoc(Nevermore.Match, :match, args)
-    |> put_assoc(Nevermore.StationAssignment, :station_assignment, args)
-    |> put_assoc(Nevermore.Alliance, :alliance, args)
+    changeset =
+      Nevermore.MatchPenalty.changeset(%Nevermore.MatchPenalty{}, args)
+      |> put_assoc(Nevermore.Schedule, :schedule, args)
+      |> put_assoc(Nevermore.ScheduledMatch, :scheduled_match, args)
+      |> put_assoc(Nevermore.Match, :match, args)
+      |> put_assoc(Nevermore.StationAssignment, :station_assignment, args)
+      |> put_assoc(Nevermore.Alliance, :alliance, args)
+
     Nevermore.Repo.insert(changeset)
   end
 
@@ -21,12 +23,13 @@ defmodule NevermoreWeb.Resolvers.MatchPenalty do
     doc = Nevermore.Repo.get(Nevermore.MatchPenalty, args.id)
 
     if doc != nil do
-      changeset = Nevermore.MatchPenalty.changeset(doc, args)
-      |> put_assoc(Nevermore.Schedule, :schedule, args)
-      |> put_assoc(Nevermore.ScheduledMatch, :scheduled_match, args)
-      |> put_assoc(Nevermore.Match, :match, args)
-      |> put_assoc(Nevermore.StationAssignment, :station_assignment, args)
-      |> put_assoc(Nevermore.Alliance, :alliance, args)
+      changeset =
+        Nevermore.MatchPenalty.changeset(doc, args)
+        |> put_assoc(Nevermore.Schedule, :schedule, args)
+        |> put_assoc(Nevermore.ScheduledMatch, :scheduled_match, args)
+        |> put_assoc(Nevermore.Match, :match, args)
+        |> put_assoc(Nevermore.StationAssignment, :station_assignment, args)
+        |> put_assoc(Nevermore.Alliance, :alliance, args)
 
       Nevermore.Repo.update(changeset)
     else

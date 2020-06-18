@@ -2,6 +2,7 @@
   <library name="dataloader" type="mix">
     <CLASSES>
       <root url="file://$PROJECT_DIR$/_build/dev/lib/dataloader/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/test/lib/dataloader/ebin" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

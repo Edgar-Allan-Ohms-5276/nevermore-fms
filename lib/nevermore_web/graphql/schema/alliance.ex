@@ -17,9 +17,9 @@ defmodule NevermoreWeb.Schema.Alliance do
   object :alliance_queries do
     @desc "Retrieves all alliances within the DB, based on the arguments."
     field :alliances, list_of(:alliance) do
-      arg :id, :integer
-      arg :name, :string
-      arg :notes, :string
+      arg(:id, :integer)
+      arg(:name, :string)
+      arg(:notes, :string)
       resolve(handle_errors(&Resolvers.Alliance.list_alliances/3))
     end
   end
@@ -30,26 +30,25 @@ defmodule NevermoreWeb.Schema.Alliance do
     # ------------------------------------------------------------------------------------------------------
     @desc "Creates a new alliance."
     field :create_alliance, type: :alliance do
-      arg :name, :string
-      arg :teams, list_of(:integer)
-      arg :notes, :string
+      arg(:name, :string)
+      arg(:teams, list_of(:integer))
+      arg(:notes, :string)
       resolve(handle_errors(&Resolvers.Alliance.create_alliance/3))
     end
 
     @desc "Updates a alliance."
     field :update_alliance, type: :alliance do
-      arg :id, non_null(:integer)
-      arg :name, :string
-      arg :teams, list_of(:integer)
-      arg :notes, :string
+      arg(:id, non_null(:integer))
+      arg(:name, :string)
+      arg(:teams, list_of(:integer))
+      arg(:notes, :string)
       resolve(handle_errors(&Resolvers.Alliance.update_alliance/3))
     end
 
     @desc "Deletes a alliance."
     field :delete_alliance, type: :alliance do
-      arg :id, non_null(:integer)
+      arg(:id, non_null(:integer))
       resolve(handle_errors(&Resolvers.Alliance.delete_alliance/3))
     end
   end
-
 end

@@ -23,18 +23,18 @@ defmodule NevermoreWeb.Schema.MatchEvent do
   object :match_event_queries do
     @desc "Retrieves all match events within the DB, based on the arguments."
     field :match_events, list_of(:match_event) do
-      arg :id, :integer
-      arg :occurred_at, :datetime
-      arg :schedule, :integer
-      arg :scheduled_match, :integer
-      arg :match, :integer
-      arg :station_assignment, :integer
-      arg :alliance, :integer
-      arg :type, :string
-      arg :alliance_change, :integer
-      arg :notes, :string
-      arg :inserted_at, :datetime
-      arg :updated_at, :datetime
+      arg(:id, :integer)
+      arg(:occurred_at, :datetime)
+      arg(:schedule, :integer)
+      arg(:scheduled_match, :integer)
+      arg(:match, :integer)
+      arg(:station_assignment, :integer)
+      arg(:alliance, :integer)
+      arg(:type, :string)
+      arg(:alliance_change, :integer)
+      arg(:notes, :string)
+      arg(:inserted_at, :datetime)
+      arg(:updated_at, :datetime)
       resolve(handle_errors(&Resolvers.MatchEvent.list_match_events/3))
     end
   end
@@ -45,42 +45,41 @@ defmodule NevermoreWeb.Schema.MatchEvent do
     # ------------------------------------------------------------------------------------------------------
     @desc "Creates a new match event."
     field :create_match_event, type: :match_event do
-      arg :occurred_at, :datetime
-      arg :schedule, :integer
-      arg :scheduled_match, :integer
-      arg :match, :integer
-      arg :station_assignment, :integer
-      arg :alliance, :integer
-      arg :type, :string
-      arg :alliance_change, :integer
-      arg :notes, :string
-      arg :inserted_at, :datetime
-      arg :updated_at, :datetime
+      arg(:occurred_at, :datetime)
+      arg(:schedule, :integer)
+      arg(:scheduled_match, :integer)
+      arg(:match, :integer)
+      arg(:station_assignment, :integer)
+      arg(:alliance, :integer)
+      arg(:type, :string)
+      arg(:alliance_change, :integer)
+      arg(:notes, :string)
+      arg(:inserted_at, :datetime)
+      arg(:updated_at, :datetime)
       resolve(handle_errors(&Resolvers.MatchEvent.create_match_event/3))
     end
 
     @desc "Updates a match event."
     field :update_match_event, type: :match_event do
-      arg :id, non_null(:integer)
-      arg :occurred_at, :datetime
-      arg :schedule, :integer
-      arg :scheduled_match, :integer
-      arg :match, :integer
-      arg :station_assignment, :integer
-      arg :alliance, :integer
-      arg :type, :string
-      arg :alliance_change, :integer
-      arg :notes, :string
-      arg :inserted_at, :datetime
-      arg :updated_at, :datetime
+      arg(:id, non_null(:integer))
+      arg(:occurred_at, :datetime)
+      arg(:schedule, :integer)
+      arg(:scheduled_match, :integer)
+      arg(:match, :integer)
+      arg(:station_assignment, :integer)
+      arg(:alliance, :integer)
+      arg(:type, :string)
+      arg(:alliance_change, :integer)
+      arg(:notes, :string)
+      arg(:inserted_at, :datetime)
+      arg(:updated_at, :datetime)
       resolve(handle_errors(&Resolvers.MatchEvent.update_match_event/3))
     end
 
     @desc "Deletes a match event."
     field :delete_match_event, type: :match_event do
-      arg :id, non_null(:integer)
+      arg(:id, non_null(:integer))
       resolve(handle_errors(&Resolvers.MatchEvent.delete_match_event/3))
     end
   end
-
 end

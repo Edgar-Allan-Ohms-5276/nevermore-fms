@@ -8,11 +8,12 @@ defmodule NevermoreWeb.Resolvers.StationAssignment do
   end
 
   def create_station_assignment(_parent, args, _resolution) do
-    changeset = Nevermore.StationAssignment.changeset(%Nevermore.StationAssignment{}, args)
-    |> put_assoc(Nevermore.Alliance, :alliance, args)
-    |> put_assoc(Nevermore.Team, :station_one, args)
-    |> put_assoc(Nevermore.Team, :station_two, args)
-    |> put_assoc(Nevermore.Team, :station_three, args)
+    changeset =
+      Nevermore.StationAssignment.changeset(%Nevermore.StationAssignment{}, args)
+      |> put_assoc(Nevermore.Alliance, :alliance, args)
+      |> put_assoc(Nevermore.Team, :station_one, args)
+      |> put_assoc(Nevermore.Team, :station_two, args)
+      |> put_assoc(Nevermore.Team, :station_three, args)
 
     Nevermore.Repo.insert(changeset)
   end
@@ -21,11 +22,12 @@ defmodule NevermoreWeb.Resolvers.StationAssignment do
     doc = Nevermore.Repo.get(Nevermore.StationAssignment, args.id)
 
     if doc != nil do
-      changeset = Nevermore.StationAssignment.changeset(doc, args)
-      |> put_assoc(Nevermore.Alliance, :alliance, args)
-      |> put_assoc(Nevermore.Team, :station_one, args)
-      |> put_assoc(Nevermore.Team, :station_two, args)
-      |> put_assoc(Nevermore.Team, :station_three, args)
+      changeset =
+        Nevermore.StationAssignment.changeset(doc, args)
+        |> put_assoc(Nevermore.Alliance, :alliance, args)
+        |> put_assoc(Nevermore.Team, :station_one, args)
+        |> put_assoc(Nevermore.Team, :station_two, args)
+        |> put_assoc(Nevermore.Team, :station_three, args)
 
       Nevermore.Repo.update(changeset)
     else

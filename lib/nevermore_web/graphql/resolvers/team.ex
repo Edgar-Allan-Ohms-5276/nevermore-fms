@@ -1,6 +1,5 @@
 defmodule NevermoreWeb.Resolvers.Team do
   import Ecto.Query, only: [from: 2]
-  import NevermoreWeb.GraphQL.Helpers
 
   def list_teams(_parent, args, _resolution) do
     query = from Nevermore.Team, where: ^Map.to_list(args)

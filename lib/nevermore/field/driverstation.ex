@@ -58,7 +58,7 @@ defmodule Nevermore.Driverstation do
     {:stop, :normal, state}
   end
 
-  def handle_info({:tcp_error, _, reason}, state) do
+  def handle_info({:tcp_error, _, _reason}, state) do
     {:noreply, state}
   end
 

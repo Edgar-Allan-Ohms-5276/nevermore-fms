@@ -21,12 +21,12 @@ defmodule NevermoreWeb.Schema.Match do
   object :match_queries do
     @desc "Retrieves all matches within the DB, based on the arguments."
     field :matches, list_of(:match) do
-      arg :id, :integer
-      arg :schedule, :integer
-      arg :scheduled_match, :integer
-      arg :start_time, :datetime
-      arg :end_time, :datetime
-      arg :notes, :string
+      arg(:id, :integer)
+      arg(:schedule, :integer)
+      arg(:scheduled_match, :integer)
+      arg(:start_time, :datetime)
+      arg(:end_time, :datetime)
+      arg(:notes, :string)
       resolve(handle_errors(&Resolvers.Match.list_matches/3))
     end
   end
@@ -37,30 +37,29 @@ defmodule NevermoreWeb.Schema.Match do
     # ------------------------------------------------------------------------------------------------------
     @desc "Creates a new match."
     field :create_match, type: :match do
-      arg :schedule, :integer
-      arg :scheduled_match, :integer
-      arg :start_time, :datetime
-      arg :end_time, :datetime
-      arg :notes, :string
+      arg(:schedule, :integer)
+      arg(:scheduled_match, :integer)
+      arg(:start_time, :datetime)
+      arg(:end_time, :datetime)
+      arg(:notes, :string)
       resolve(handle_errors(&Resolvers.Match.create_match/3))
     end
 
     @desc "Updates a match."
     field :update_match, type: :match do
-      arg :id, non_null(:integer)
-      arg :schedule, :integer
-      arg :scheduled_match, :integer
-      arg :start_time, :datetime
-      arg :end_time, :datetime
-      arg :notes, :string
+      arg(:id, non_null(:integer))
+      arg(:schedule, :integer)
+      arg(:scheduled_match, :integer)
+      arg(:start_time, :datetime)
+      arg(:end_time, :datetime)
+      arg(:notes, :string)
       resolve(handle_errors(&Resolvers.Match.create_match/3))
     end
 
     @desc "Deletes a match."
     field :delete_match, type: :match do
-      arg :id, non_null(:integer)
+      arg(:id, non_null(:integer))
       resolve(handle_errors(&Resolvers.Match.delete_match/3))
     end
   end
-
 end

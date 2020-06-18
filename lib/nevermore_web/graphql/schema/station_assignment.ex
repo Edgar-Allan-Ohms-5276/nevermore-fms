@@ -18,20 +18,20 @@ defmodule NevermoreWeb.Schema.StationAssignment do
   end
 
   enum :side do
-    value :red
-    value :blue
+    value(:red, as: "r")
+    value(:blue, as: "b")
   end
 
   object :station_assignment_queries do
     @desc "Retrieves all station assignments within the DB, based on the arguments."
     field :station_assignments, list_of(:station_assignment) do
-      arg :id, :integer
-      arg :side, :side
-      arg :alliance, :integer
-      arg :station_one, :integer
-      arg :station_two, :integer
-      arg :station_three, :integer
-      arg :notes, :string
+      arg(:id, :integer)
+      arg(:side, :side)
+      arg(:alliance, :integer)
+      arg(:station_one, :integer)
+      arg(:station_two, :integer)
+      arg(:station_three, :integer)
+      arg(:notes, :string)
       resolve(handle_errors(&Resolvers.StationAssignment.list_station_assignments/3))
     end
   end
@@ -42,32 +42,31 @@ defmodule NevermoreWeb.Schema.StationAssignment do
     # ------------------------------------------------------------------------------------------------------
     @desc "Creates a new station assignment."
     field :create_station_assignment, type: :station_assignment do
-      arg :side, :side
-      arg :alliance, :integer
-      arg :station_one, :integer
-      arg :station_two, :integer
-      arg :station_three, :integer
-      arg :notes, :string
+      arg(:side, :side)
+      arg(:alliance, :integer)
+      arg(:station_one, :integer)
+      arg(:station_two, :integer)
+      arg(:station_three, :integer)
+      arg(:notes, :string)
       resolve(handle_errors(&Resolvers.StationAssignment.create_station_assignment/3))
     end
 
     @desc "Updates a station assignment."
     field :update_station_assignment, type: :station_assignment do
-      arg :id, non_null(:integer)
-      arg :side, :side
-      arg :alliance, :integer
-      arg :station_one, :integer
-      arg :station_two, :integer
-      arg :station_three, :integer
-      arg :notes, :string
+      arg(:id, non_null(:integer))
+      arg(:side, :side)
+      arg(:alliance, :integer)
+      arg(:station_one, :integer)
+      arg(:station_two, :integer)
+      arg(:station_three, :integer)
+      arg(:notes, :string)
       resolve(handle_errors(&Resolvers.StationAssignment.update_station_assignment/3))
     end
 
     @desc "Deletes a station assignment."
     field :delete_station_assignment, type: :station_assignment do
-      arg :id, non_null(:integer)
+      arg(:id, non_null(:integer))
       resolve(handle_errors(&Resolvers.StationAssignment.delete_station_assignment/3))
     end
   end
-
 end

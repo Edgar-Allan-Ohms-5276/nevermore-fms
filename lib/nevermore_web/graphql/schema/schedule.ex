@@ -32,22 +32,22 @@ defmodule NevermoreWeb.Schema.Schedule do
     # ------------------------------------------------------------------------------------------------------
     @desc "Creates a new schedule."
     field :create_schedule, type: :schedule do
-      arg :name, :string
-      arg :notes, :string
+      arg(:name, :string)
+      arg(:notes, :string)
       resolve(handle_errors(&Resolvers.Schedule.create_schedule/3))
     end
 
     @desc "Updates a schedule."
     field :update_schedule, type: :schedule do
-      arg :id, :integer
-      arg :name, :string
-      arg :notes, :string
+      arg(:id, :integer)
+      arg(:name, :string)
+      arg(:notes, :string)
       resolve(handle_errors(&Resolvers.Schedule.update_schedule/3))
     end
 
     @desc "Deletes a schedule."
     field :delete_schedule, type: :schedule do
-      arg :id, non_null(:integer)
+      arg(:id, non_null(:integer))
       resolve(handle_errors(&Resolvers.Schedule.delete_schedule/3))
     end
   end

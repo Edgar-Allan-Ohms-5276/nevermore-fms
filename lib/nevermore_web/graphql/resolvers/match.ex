@@ -8,9 +8,10 @@ defmodule NevermoreWeb.Resolvers.Match do
   end
 
   def create_match(_parent, args, _resolution) do
-    changeset = Nevermore.Match.changeset(%Nevermore.Match{}, args)
-    |> put_assoc(Nevermore.Schedule, :schedule, args)
-    |> put_assoc(Nevermore.ScheduledMatch, :scheduled_match, args)
+    changeset =
+      Nevermore.Match.changeset(%Nevermore.Match{}, args)
+      |> put_assoc(Nevermore.Schedule, :schedule, args)
+      |> put_assoc(Nevermore.ScheduledMatch, :scheduled_match, args)
 
     Nevermore.Repo.insert(changeset)
   end
@@ -19,9 +20,10 @@ defmodule NevermoreWeb.Resolvers.Match do
     doc = Nevermore.Repo.get(Nevermore.Match, args.id)
 
     if doc != nil do
-      changeset = Nevermore.Match.changeset(doc, args)
-      |> put_assoc(Nevermore.Schedule, :schedule, args)
-      |> put_assoc(Nevermore.ScheduledMatch, :scheduled_match, args)
+      changeset =
+        Nevermore.Match.changeset(doc, args)
+        |> put_assoc(Nevermore.Schedule, :schedule, args)
+        |> put_assoc(Nevermore.ScheduledMatch, :scheduled_match, args)
 
       Nevermore.Repo.update(changeset)
     else

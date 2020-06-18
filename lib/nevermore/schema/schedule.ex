@@ -5,7 +5,6 @@ defmodule Nevermore.Schedule do
   schema "schedules" do
     field :name, :string
     field :notes, :string
-    has_many :teams, Nevermore.Team
 
     timestamps()
   end

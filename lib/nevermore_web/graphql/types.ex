@@ -1,6 +1,5 @@
 defmodule NevermoreWeb.Schema.Types do
   use Absinthe.Schema.Notation
-  import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
   @desc """
   The [`DateTime`](https://hexdocs.pm/elixir/DateTime.html) scalar type represents a date and time in the UTC
