@@ -34,7 +34,6 @@ defmodule NevermoreWeb.Schema do
   end
 
   mutation do
-
     import_fields :team_mutations
 
     import_fields :schedule_mutations
@@ -50,22 +49,6 @@ defmodule NevermoreWeb.Schema do
     import_fields :match_event_mutations
 
     import_fields :match_penalty_mutations
-  end
-
-  subscription do
-    field :team_added, :team do
-      config fn args, _ ->
-        {:ok, topic: "teamAdded"}
-      end
-
-      trigger :create_team, topic: fn team ->
-        "teamAdded"
-      end
-
-      resolve fn team, _, _ ->
-        {:ok, team}
-      end
-    end
   end
 
   def context(ctx) do

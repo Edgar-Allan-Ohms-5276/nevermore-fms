@@ -7,7 +7,7 @@ defmodule NevermoreWeb.Schema.StationAssignment do
 
   object :station_assignment do
     field :id, :integer
-    field :side, :string
+    field :side, :side
     field :alliance, :alliance, resolve: dataloader(Nevermore.Repo)
     field :station_one, :team, resolve: dataloader(Nevermore.Repo)
     field :station_two, :team, resolve: dataloader(Nevermore.Repo)
@@ -17,11 +17,16 @@ defmodule NevermoreWeb.Schema.StationAssignment do
     field :updated_at, :datetime
   end
 
+  enum :side do
+    value :red
+    value :blue
+  end
+
   object :station_assignment_queries do
     @desc "Retrieves all station assignments within the DB, based on the arguments."
     field :station_assignments, list_of(:station_assignment) do
       arg :id, :integer
-      arg :side, :string
+      arg :side, :side
       arg :alliance, :integer
       arg :station_one, :integer
       arg :station_two, :integer
@@ -37,7 +42,7 @@ defmodule NevermoreWeb.Schema.StationAssignment do
     # ------------------------------------------------------------------------------------------------------
     @desc "Creates a new station assignment."
     field :create_station_assignment, type: :station_assignment do
-      arg :side, :string
+      arg :side, :side
       arg :alliance, :integer
       arg :station_one, :integer
       arg :station_two, :integer
@@ -49,7 +54,7 @@ defmodule NevermoreWeb.Schema.StationAssignment do
     @desc "Updates a station assignment."
     field :update_station_assignment, type: :station_assignment do
       arg :id, non_null(:integer)
-      arg :side, :string
+      arg :side, :side
       arg :alliance, :integer
       arg :station_one, :integer
       arg :station_two, :integer
