@@ -1,6 +1,10 @@
 defmodule NevermoreWeb.Schema.Types do
   use Absinthe.Schema.Notation
 
+  object :success do
+    field :successful, :boolean
+  end
+
   @desc """
   The [`DateTime`](https://hexdocs.pm/elixir/DateTime.html) scalar type represents a date and time in the UTC
   timezone. The DateTime appears in a JSON response as an ISO8601 formatted

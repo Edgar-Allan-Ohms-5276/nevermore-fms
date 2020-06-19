@@ -15,12 +15,12 @@ defmodule Nevermore.Application do
       {Phoenix.PubSub, name: Nevermore.PubSub},
       # Start the Endpoint (http/https)
       NevermoreWeb.Endpoint,
+      # Subscription Socket
+      {Absinthe.Subscription, NevermoreWeb.Endpoint},
       # Start the Field
       Nevermore.Field,
       # Start Field Supervisor
-      {DynamicSupervisor, strategy: :one_for_one, name: Nevermore.Field.DynamicSupervisor},
-      # Subscription Socket
-      {Absinthe.Subscription, NevermoreWeb.Endpoint}
+      {DynamicSupervisor, strategy: :one_for_one, name: Nevermore.Field.DynamicSupervisor}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

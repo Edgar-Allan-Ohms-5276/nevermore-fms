@@ -20,7 +20,7 @@ defmodule Nevermore.MixProject do
   def application do
     [
       mod: {Nevermore.Application, []},
-      extra_applications: [:logger, :runtime_tools, :timex]
+      extra_applications: [:logger, :runtime_tools, :timex, :httpoison, :scrivener]
     ]
   end
 
@@ -45,7 +45,10 @@ defmodule Nevermore.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:timex, "~> 3.0"},
       {:absinthe_phoenix, "~> 2.0"},
-      {:dataloader, "~> 1.0.0"}
+      {:dataloader, "~> 1.0.0"},
+      {:httpoison, "~> 1.6"},
+      {:scrivener_ecto, "~> 2.0"},
+      {:scrivener, "~> 2.0"}
     ]
   end
 

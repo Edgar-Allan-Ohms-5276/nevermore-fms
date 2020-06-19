@@ -8,7 +8,8 @@
 use Mix.Config
 
 config :nevermore,
-  ecto_repos: [Nevermore.Repo]
+  ecto_repos: [Nevermore.Repo],
+  tba_key: "9nWENhLxjJKUJI0Cl9ab79nE9JddOvWdyHobalIsKnmL4becqRYGoAZNFSh2V6mK"
 
 # Configures the endpoint
 config :nevermore, NevermoreWeb.Endpoint,

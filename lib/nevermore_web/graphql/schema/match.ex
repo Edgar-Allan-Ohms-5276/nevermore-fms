@@ -5,6 +5,14 @@ defmodule NevermoreWeb.Schema.Match do
 
   alias NevermoreWeb.Resolvers
 
+  object :match_page do
+    field :entries, list_of(:match)
+    field :page_number, :integer
+    field :page_size, :integer
+    field :total_pages, :integer
+    field :total_entries, :integer
+  end
+
   object :match do
     field :id, :integer
     field :schedule, :schedule, resolve: dataloader(Nevermore.Repo)
@@ -20,14 +28,22 @@ defmodule NevermoreWeb.Schema.Match do
 
   object :match_queries do
     @desc "Retrieves all matches within the DB, based on the arguments."
-    field :matches, list_of(:match) do
+    field :matches, :match_page do
       arg(:id, :integer)
       arg(:schedule, :integer)
       arg(:scheduled_match, :integer)
       arg(:start_time, :datetime)
       arg(:end_time, :datetime)
       arg(:notes, :string)
+      arg(:page, non_null(:integer))
+      arg(:page_limit, non_null(:integer))
       resolve(handle_errors(&Resolvers.Match.list_matches/3))
+    end
+
+    @desc "Retrieves a match by it's ID."
+    field :match, :match do
+      arg(:id, non_null(:integer))
+      resolve(handle_errors(&Resolvers.Match.get_match/3))
     end
   end
 

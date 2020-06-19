@@ -5,6 +5,14 @@ defmodule NevermoreWeb.Schema.MatchPenalty do
 
   alias NevermoreWeb.Resolvers
 
+  object :match_penalty_page do
+    field :entries, list_of(:match_penalty)
+    field :page_number, :integer
+    field :page_size, :integer
+    field :total_pages, :integer
+    field :total_entries, :integer
+  end
+
   object :match_penalty do
     field :id, :integer
     field :type, :string
@@ -19,7 +27,7 @@ defmodule NevermoreWeb.Schema.MatchPenalty do
 
   object :match_penalty_queries do
     @desc "Retrieves all match penalties within the DB, based on the arguments."
-    field :match_penalties, list_of(:match_penalty) do
+    field :match_penalties, :match_penalty_page do
       arg(:id, :integer)
       arg(:type, :string)
       arg(:occurred_at, :datetime)
@@ -29,7 +37,15 @@ defmodule NevermoreWeb.Schema.MatchPenalty do
       arg(:alliance, :integer)
       arg(:inserted_at, :datetime)
       arg(:updated_at, :datetime)
+      arg(:page, non_null(:integer))
+      arg(:page_limit, non_null(:integer))
       resolve(handle_errors(&Resolvers.MatchPenalty.list_match_penalties/3))
+    end
+
+    @desc "Retrieves a match penalty by it's ID."
+    field :match_penalty, :match_penalty do
+      arg(:id, non_null(:integer))
+      resolve(handle_errors(&Resolvers.MatchPenalty.get_match_penalty/3))
     end
   end
 

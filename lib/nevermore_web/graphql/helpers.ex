@@ -8,4 +8,16 @@ defmodule NevermoreWeb.GraphQL.Helpers do
       changeset
     end
   end
+
+  def get_page_attrs(args) do
+    page = args.page
+    page_limit = args.page_limit
+
+    args =
+      args
+      |> Map.delete(:page)
+      |> Map.delete(:page_limit)
+
+    {page, page_limit, args}
+  end
 end

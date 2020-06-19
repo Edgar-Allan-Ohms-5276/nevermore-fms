@@ -1,9 +1,21 @@
 defmodule NevermoreWeb.Resolvers.Team do
   import Ecto.Query, only: [from: 2]
+  import NevermoreWeb.GraphQL.Helpers
+
+  def get_team(_parent, args, _resolution) do
+    doc = Nevermore.Repo.get(Nevermore.Team, args.id)
+
+    if doc != nil do
+      {:ok, doc}
+    else
+      {:error, "Could not find that row."}
+    end
+  end
 
   def list_teams(_parent, args, _resolution) do
-    query = from Nevermore.Team, where: ^Map.to_list(args)
-    {:ok, Nevermore.Repo.all(query)}
+    {page, page_limit, args} = get_page_attrs(args)
+    query = from Nevermore.Team, where: ^Map.to_list(args), order_by: :id
+    {:ok, Nevermore.Repo.paginate(query, page: page, page_size: page_limit)}
   end
 
   def create_team(_parent, args, _resolution) do

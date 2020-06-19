@@ -5,6 +5,14 @@ defmodule NevermoreWeb.Schema.ScheduledMatch do
 
   alias NevermoreWeb.Resolvers
 
+  object :scheduled_match_page do
+    field :entries, list_of(:scheduled_match)
+    field :page_number, :integer
+    field :page_size, :integer
+    field :total_pages, :integer
+    field :total_entries, :integer
+  end
+
   object :scheduled_match do
     field :id, :integer
     field :schedule, :schedule, resolve: dataloader(Nevermore.Repo)
@@ -20,7 +28,7 @@ defmodule NevermoreWeb.Schema.ScheduledMatch do
 
   object :scheduled_match_queries do
     @desc "Retrieves all scheduled matches within the DB, based on the arguments."
-    field :scheduled_matches, list_of(:scheduled_match) do
+    field :scheduled_matches, :scheduled_match_page do
       arg(:id, :integer)
       arg(:schedule, :integer)
       arg(:red_station, :integer)
@@ -28,7 +36,15 @@ defmodule NevermoreWeb.Schema.ScheduledMatch do
       arg(:match_penalties, :integer)
       arg(:scheduled_start, :datetime)
       arg(:notes, :string)
+      arg(:page, non_null(:integer))
+      arg(:page_limit, non_null(:integer))
       resolve(handle_errors(&Resolvers.ScheduledMatch.list_scheduled_matches/3))
+    end
+
+    @desc "Retrieves a scheduled match by it's ID."
+    field :scheduled_match, :scheduled_match do
+      arg(:id, non_null(:integer))
+      resolve(handle_errors(&Resolvers.ScheduledMatch.get_scheduled_match/3))
     end
   end
 

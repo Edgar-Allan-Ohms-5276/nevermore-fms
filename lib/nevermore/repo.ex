@@ -3,6 +3,8 @@ defmodule Nevermore.Repo do
     otp_app: :nevermore,
     adapter: Ecto.Adapters.Postgres
 
+  use Scrivener, page_size: 20
+
   def data() do
     Dataloader.Ecto.new(Nevermore.Repo, query: &query/2)
   end

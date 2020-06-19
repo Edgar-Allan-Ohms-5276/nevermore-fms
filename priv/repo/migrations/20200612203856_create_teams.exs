@@ -3,10 +3,17 @@ defmodule Nevermore.Repo.Migrations.CreateTeams do
 
   def change do
     create table(:teams) do
-      add :name, :string
-      add :logo_url, :string
-      add :song_url, :string
-      add :notes, :string
+      add :name, :text
+      add :logo_url, :text
+      add :song_url, :text
+      add :sponsors, {:array, :text}
+      add :city, :text
+      add :state, :text
+      add :country, :string
+      add :rookie_year, :integer
+      add :school, :text
+      add :website, :text
+      add :notes, :text
 
       timestamps()
     end

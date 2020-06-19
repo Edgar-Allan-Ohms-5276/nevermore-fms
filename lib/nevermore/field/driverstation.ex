@@ -63,10 +63,12 @@ defmodule Nevermore.Driverstation do
   end
 
   def handle_info({:send_info, status, station}, state) do
+    original_state = state
     send_station_info(status, station)
     send_event_name("EAO")
     state = Map.put(state, :status, status)
     state = Map.put(state, :station, station)
+    check_state_and_publish(original_state, state)
     {:noreply, state}
   end
 
@@ -111,7 +113,9 @@ defmodule Nevermore.Driverstation do
   Sets a key in the state
   """
   def handle_info({:set_state_key, key, value}, state) do
+    original_state = state
     state = Map.put(state, key, value)
+    check_state_and_publish(original_state, state)
     {:noreply, state}
   end
 
@@ -132,16 +136,19 @@ defmodule Nevermore.Driverstation do
          battery_voltage},
         state
       ) do
+    original_state = state
     state = Map.put(state, :last_udp_message_time, Duration.now())
     state = Map.put(state, :request_e_stopped, emergency_stop_request)
     state = Map.put(state, :comms, comms)
     state = Map.put(state, :radio_ping, radio_ping)
     state = Map.put(state, :rio_ping, rio_ping)
     state = Map.put(state, :battery_voltage, battery_voltage)
+    check_state_and_publish(original_state, state)
     {:noreply, state}
   end
 
   def handle_info({:tick, match_state, time_left, match_level, match_num, udp_socket}, state) do
+    original_state = state
     if Duration.diff(Duration.now(), state.last_udp_message_time, :seconds) > 2 do
       send(self(), :kick)
       {:noreply, state}
@@ -204,7 +211,7 @@ defmodule Nevermore.Driverstation do
         state
         |> Map.put(:udp_sequence_num, state.udp_sequence_num + 1)
 
-      Nevermore.PubSub.Driverstation.publish(state.team_num, {:ds_update, state.team_num, state})
+      check_state_and_publish(original_state, state)
       {:noreply, state}
     end
   end
@@ -248,6 +255,12 @@ defmodule Nevermore.Driverstation do
       end
     else
       false
+    end
+  end
+
+  defp check_state_and_publish(original_state, new_state) do
+    if original_state != new_state do
+      Absinthe.Subscription.publish(NevermoreWeb.Endpoint, new_state, driverstation_update: "driverstation_update_#{new_state.team_num}")
     end
   end
 

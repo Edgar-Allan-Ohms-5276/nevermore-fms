@@ -5,6 +5,14 @@ defmodule NevermoreWeb.Schema.MatchEvent do
 
   alias NevermoreWeb.Resolvers
 
+  object :match_event_page do
+    field :entries, list_of(:match_event)
+    field :page_number, :integer
+    field :page_size, :integer
+    field :total_pages, :integer
+    field :total_entries, :integer
+  end
+
   object :match_event do
     field :id, :integer
     field :occurred_at, :datetime
@@ -22,7 +30,7 @@ defmodule NevermoreWeb.Schema.MatchEvent do
 
   object :match_event_queries do
     @desc "Retrieves all match events within the DB, based on the arguments."
-    field :match_events, list_of(:match_event) do
+    field :match_events, :match_event_page do
       arg(:id, :integer)
       arg(:occurred_at, :datetime)
       arg(:schedule, :integer)
@@ -35,7 +43,15 @@ defmodule NevermoreWeb.Schema.MatchEvent do
       arg(:notes, :string)
       arg(:inserted_at, :datetime)
       arg(:updated_at, :datetime)
+      arg(:page, non_null(:integer))
+      arg(:page_limit, non_null(:integer))
       resolve(handle_errors(&Resolvers.MatchEvent.list_match_events/3))
+    end
+
+    @desc "Retrieves a match event by it's ID."
+    field :match_event, :match_event do
+      arg(:id, non_null(:integer))
+      resolve(handle_errors(&Resolvers.MatchEvent.get_match_event/3))
     end
   end
 

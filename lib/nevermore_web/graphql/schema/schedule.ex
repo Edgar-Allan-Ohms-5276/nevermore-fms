@@ -5,6 +5,14 @@ defmodule NevermoreWeb.Schema.Schedule do
 
   alias NevermoreWeb.Resolvers
 
+  object :schedule_page do
+    field :entries, list_of(:schedule)
+    field :page_number, :integer
+    field :page_size, :integer
+    field :total_pages, :integer
+    field :total_entries, :integer
+  end
+
   object :schedule do
     field :id, :integer
     field :name, :string
@@ -18,11 +26,19 @@ defmodule NevermoreWeb.Schema.Schedule do
 
   object :schedule_queries do
     @desc "Retrieves all schedules within the DB, based on the arguments."
-    field :schedules, list_of(:schedule) do
+    field :schedules, :schedule_page do
       arg(:id, :integer)
       arg(:name, :string)
       arg(:notes, :string)
+      arg(:page, non_null(:integer))
+      arg(:page_limit, non_null(:integer))
       resolve(handle_errors(&Resolvers.Schedule.list_schedules/3))
+    end
+
+    @desc "Retrieves a schedule by it's ID."
+    field :schedule, :schedule do
+      arg(:id, non_null(:integer))
+      resolve(handle_errors(&Resolvers.Schedule.get_schedule/3))
     end
   end
 

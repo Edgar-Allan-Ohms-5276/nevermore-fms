@@ -1,9 +1,21 @@
 defmodule NevermoreWeb.Resolvers.Alliance do
   import Ecto.Query, only: [from: 2]
+  import NevermoreWeb.GraphQL.Helpers
+
+  def get_alliance(_parent, args, _resolution) do
+    doc = Nevermore.Repo.get(Nevermore.Alliance, args.id)
+
+    if doc != nil do
+      {:ok, doc}
+    else
+      {:error, "Could not find that row."}
+    end
+  end
 
   def list_alliances(_parent, args, _resolution) do
+    {page, page_limit, args} = get_page_attrs(args)
     query = from Nevermore.Alliance, where: ^Map.to_list(args)
-    {:ok, Nevermore.Repo.all(query)}
+    {:ok, Nevermore.Repo.paginate(query, page: page, page_size: page_limit)}
   end
 
   def create_alliance(_parent, args, _resolution) do

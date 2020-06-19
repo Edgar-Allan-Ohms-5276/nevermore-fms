@@ -2,9 +2,20 @@ defmodule NevermoreWeb.Resolvers.ScheduledMatch do
   import Ecto.Query, only: [from: 2]
   import NevermoreWeb.GraphQL.Helpers
 
+  def get_scheduled_match(_parent, args, _resolution) do
+    doc = Nevermore.Repo.get(Nevermore.ScheduledMatch, args.id)
+
+    if doc != nil do
+      {:ok, doc}
+    else
+      {:error, "Could not find that row."}
+    end
+  end
+
   def list_scheduled_matches(_parent, args, _resolution) do
+    {page, page_limit, args} = get_page_attrs(args)
     query = from Nevermore.ScheduledMatch, where: ^Map.to_list(args)
-    {:ok, Nevermore.Repo.all(query)}
+    {:ok, Nevermore.Repo.paginate(query, page: page, page_size: page_limit)}
   end
 
   def create_scheduled_match(_parent, args, _resolution) do

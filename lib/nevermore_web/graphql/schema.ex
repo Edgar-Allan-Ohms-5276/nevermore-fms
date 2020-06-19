@@ -11,6 +11,8 @@ defmodule NevermoreWeb.Schema do
   import_types(NevermoreWeb.Schema.Match)
   import_types(NevermoreWeb.Schema.MatchEvent)
   import_types(NevermoreWeb.Schema.MatchPenalty)
+  import_types(NevermoreWeb.Schema.Field)
+  import_types(NevermoreWeb.Schema.Driverstation)
 
   query do
     import_fields(:team_queries)
@@ -28,6 +30,10 @@ defmodule NevermoreWeb.Schema do
     import_fields(:match_event_queries)
 
     import_fields(:match_penalty_queries)
+
+    import_fields(:field_queries)
+
+    import_fields(:driverstation_queries)
   end
 
   mutation do
@@ -46,6 +52,16 @@ defmodule NevermoreWeb.Schema do
     import_fields(:match_event_mutations)
 
     import_fields(:match_penalty_mutations)
+
+    import_fields(:field_mutations)
+
+    import_fields(:driverstation_mutations)
+  end
+
+  subscription do
+    import_fields(:field_subscriptions)
+
+    import_fields(:driverstation_subscriptions)
   end
 
   def context(ctx) do

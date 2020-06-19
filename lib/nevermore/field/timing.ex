@@ -14,7 +14,8 @@ defmodule Nevermore.Timing do
       time > transition_time() + teleop_time() + endgame_time() ->
         time - (transition_time() + teleop_time() + endgame_time())
 
-      time > teleop_time() + endgame_time() && time <= transition_time() + teleop_time() + endgame_time() ->
+      time > teleop_time() + endgame_time() &&
+          time <= transition_time() + teleop_time() + endgame_time() ->
         0
 
       time <= teleop_time() + endgame_time() ->

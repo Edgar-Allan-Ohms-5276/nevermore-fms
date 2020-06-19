@@ -22,7 +22,6 @@ defmodule Nevermore.Field do
             match_state: 0,
             time_left: 0,
             event_name: "",
-            current_phase: 0,
             match_level: 0,
             match_started_at: 0,
             alliance_station_to_driverstation: %{},
@@ -100,12 +99,15 @@ defmodule Nevermore.Field do
   end
 
   def handle_info({:cant_bind_udp, error}, state) do
+    original_state = state
     state = Map.put(state, :udp_error, error)
     Process.send_after(self(), :retry_bind_udp, 500)
+    check_state_and_publish(original_state, state)
     {:noreply, state}
   end
 
   def handle_info(:retry_bind_udp, state) do
+    original_state = state
     socket =
       case :gen_udp.open(state.udp_port, [:list, ip: state.ip]) do
         {:error, _} ->
@@ -118,6 +120,7 @@ defmodule Nevermore.Field do
 
     if socket != nil do
       state = Map.put(state, :udp_error, nil)
+      check_state_and_publish(original_state, state)
       {:noreply, state}
     else
       Process.send_after(self(), :retry_bind_udp, 500)
@@ -126,13 +129,17 @@ defmodule Nevermore.Field do
   end
 
   def handle_info({:cant_bind_tcp, error}, state) do
+    original_state = state
     state = Map.put(state, :tcp_error, error)
     Process.send_after(self(), :retry_bind_tcp, 500)
+    check_state_and_publish(original_state, state)
     {:noreply, state}
   end
 
   def handle_info(:tcp_good, state) do
+    original_state = state
     state = Map.put(state, :tcp_error, nil)
+    check_state_and_publish(original_state, state)
     {:noreply, state}
   end
 
@@ -143,6 +150,7 @@ defmodule Nevermore.Field do
   end
 
   def handle_info({:driverstation_login, team_num, driverstation}, state) do
+    original_state = state
     state = Map.put(state, :driver_stations, state.driver_stations ++ [driverstation])
 
     state =
@@ -166,6 +174,8 @@ defmodule Nevermore.Field do
         state
       end
 
+    check_state_and_publish(original_state, state)
+
     {:noreply, state}
   end
 
@@ -176,6 +186,7 @@ defmodule Nevermore.Field do
         {:setup_field, match_num, tournament_level, red1, red2, red3, blue1, blue2, blue3},
         state
       ) do
+    original_state = state
     kick_all(state)
     new_team_to_station = %{}
     new_team_to_station = Map.put(new_team_to_station, red1, Enums.red1())
@@ -224,10 +235,13 @@ defmodule Nevermore.Field do
     state = Map.put(state, :match_level, tournament_level)
     state = Map.put(state, :match_state, Enums.state_notready())
 
+    check_state_and_publish(original_state, state)
+
     {:noreply, state}
   end
 
   def handle_info({:driverstation_close, driverstation}, state) do
+    original_state = state
     state = Map.put(state, :driver_stations, List.delete(state.driver_stations, driverstation))
 
     state =
@@ -244,6 +258,8 @@ defmodule Nevermore.Field do
           new_alliance_to_ds = Map.delete(state.alliance_station_to_driverstation, station)
           Map.put(state, :alliance_station_to_driverstation, new_alliance_to_ds)
       end
+
+    check_state_and_publish(original_state, state)
 
     {:noreply, state}
   end
@@ -286,6 +302,7 @@ defmodule Nevermore.Field do
   Starts the field
   """
   def handle_info(:start_field, state) do
+    original_state = state
     state =
       Map.put(
         state,
@@ -295,7 +312,7 @@ defmodule Nevermore.Field do
       )
 
     state = Map.put(state, :match_state, Enums.state_started())
-    Nevermore.PubSub.Field.publish({:field_update, state})
+    check_state_and_publish(original_state, state)
 
     {:noreply, state}
   end
@@ -304,6 +321,7 @@ defmodule Nevermore.Field do
   Stops the field
   """
   def handle_info({:stop_field, is_early}, state) do
+    original_state = state
     state =
       if is_early do
         state = Map.put(state, :match_state, Enums.state_done())
@@ -313,7 +331,7 @@ defmodule Nevermore.Field do
         state
       end
 
-    Nevermore.PubSub.Field.publish({:field_update, state})
+    check_state_and_publish(original_state, state)
 
     {:noreply, state}
   end
@@ -322,8 +340,9 @@ defmodule Nevermore.Field do
   Pauses the field
   """
   def handle_info(:pause_field, state) do
+    original_state = state
     state = Map.put(state, :match_state, Enums.state_paused())
-    Nevermore.PubSub.Field.publish({:field_update, state})
+    check_state_and_publish(original_state, state)
     {:noreply, state}
   end
 
@@ -331,8 +350,9 @@ defmodule Nevermore.Field do
   Unpauses the field
   """
   def handle_info(:unpause_field, state) do
+    original_state = state
     state = Map.put(state, :match_state, Enums.state_started())
-    Nevermore.PubSub.Field.publish({:field_update, state})
+    check_state_and_publish(original_state, state)
 
     {:noreply, state}
   end
@@ -348,8 +368,9 @@ defmodule Nevermore.Field do
   Sets a key in the state
   """
   def handle_info({:set_state_key, key, value}, state) do
+    original_state = state
     state = Map.put(state, key, value)
-    Nevermore.PubSub.Field.publish({:field_update, state})
+    check_state_and_publish(original_state, state)
     {:noreply, state}
   end
 
@@ -418,7 +439,7 @@ defmodule Nevermore.Field do
       if driverstation != nil do
         send(
           driverstation,
-          {:tick, state.match_state, state.time_left, state.match_level, state.match_num,
+          {:tick, state.match_state, state.time_left, state.f, state.match_num,
            state.udp_socket}
         )
       end
@@ -445,7 +466,15 @@ defmodule Nevermore.Field do
 
   defp check_state_and_publish(original_state, new_state) do
     if original_state != new_state do
-      Nevermore.PubSub.Field.publish({:field_update, new_state})
+      team_num_to_alliance_station = Enum.reduce(new_state.team_num_to_alliance_station, [], fn {team, station}, list ->
+        if team != nil do
+          list ++ [%{team: Nevermore.Repo.get(Nevermore.Team, team), station: station}]
+        else
+          list
+        end
+      end)
+      new_state = Map.put(new_state, :ip, :inet.ntoa(new_state.ip))
+      Absinthe.Subscription.publish(NevermoreWeb.Endpoint, Map.put(new_state, :team_num_to_alliance_station, team_num_to_alliance_station), field_state_update: "field_state_update")
     end
   end
 
