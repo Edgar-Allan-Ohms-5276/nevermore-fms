@@ -2,13 +2,17 @@ defmodule NevermoreWeb.Resolvers.MatchEvent do
   import Ecto.Query, only: [from: 2]
   import NevermoreWeb.GraphQL.Helpers
 
-  def list_match_events(_parent, args, _resolution) do
+  def list_match_events(_parent, args, %{context: %{user: _user}}) do
     {page, page_limit, args} = get_page_attrs(args)
     query = from Nevermore.MatchEvent, where: ^Map.to_list(args)
     {:ok, Nevermore.Repo.paginate(query, page: page, page_size: page_limit)}
   end
 
-  def create_match_event(args, _resolution) do
+  def list_match_events(_, _, _) do
+    {:error, "Not Authenticated"}
+  end
+
+  def create_match_event(args, %{context: %{user: _user}}) do
     changeset =
       Nevermore.MatchEvent.changeset(%Nevermore.MatchEvent{}, args)
       |> put_assoc(Nevermore.Schedule, :schedule, args)
@@ -20,7 +24,11 @@ defmodule NevermoreWeb.Resolvers.MatchEvent do
     Nevermore.Repo.insert(changeset)
   end
 
-  def update_match_event(args, _resolution) do
+  def create_match_event(_, _) do
+    {:error, "Not Authenticated"}
+  end
+
+  def update_match_event(args, %{context: %{user: _user}}) do
     doc = Nevermore.Repo.get(Nevermore.MatchEvent, args.id)
 
     if doc != nil do
@@ -38,7 +46,11 @@ defmodule NevermoreWeb.Resolvers.MatchEvent do
     end
   end
 
-  def delete_match_event(args, _resolution) do
+  def update_match_event(_, _) do
+    {:error, "Not Authenticated"}
+  end
+
+  def delete_match_event(args, %{context: %{user: _user}}) do
     doc = Nevermore.Repo.get(Nevermore.MatchEvent, args.id)
 
     if doc != nil do
@@ -46,5 +58,9 @@ defmodule NevermoreWeb.Resolvers.MatchEvent do
     else
       {:error, "That id does not exist."}
     end
+  end
+
+  def delete_match_event(_, _) do
+    {:error, "Not Authenticated"}
   end
 end

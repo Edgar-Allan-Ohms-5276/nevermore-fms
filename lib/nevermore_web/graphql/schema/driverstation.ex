@@ -27,13 +27,17 @@ defmodule NevermoreWeb.Schema.Driverstation do
     field :driverstation, :driverstation do
       arg(:team_number, :integer)
 
-      resolve(fn %{team_number: team_number}, _ ->
-        driverstation = get_driverstation_by_team(team_number)
+      resolve(fn %{team_number: team_number}, res ->
+        if Map.has_key?(res.context, :user) do
+          driverstation = get_driverstation_by_team(team_number)
 
-        if driverstation != nil do
-          {:ok, Nevermore.Driverstation.get_state(driverstation)}
+          if driverstation != nil do
+            {:ok, Nevermore.Driverstation.get_state(driverstation)}
+          else
+            {:error, "That team is not connected to the field or is not in this match."}
+          end
         else
-          {:error, "That team is not connected to the field or is not in this match."}
+          {:error, "Not Authenticated"}
         end
       end)
     end
@@ -44,14 +48,18 @@ defmodule NevermoreWeb.Schema.Driverstation do
       arg(:team_number, non_null(:integer))
       arg(:enabled, non_null(:boolean))
 
-      resolve(fn %{team_number: team_number, enabled: enabled}, _ ->
-        driverstation = get_driverstation_by_team(team_number)
+      resolve(fn %{team_number: team_number, enabled: enabled}, res ->
+        if Map.has_key?(res.context, :user) do
+          driverstation = get_driverstation_by_team(team_number)
 
-        if driverstation != nil do
-          Nevermore.Driverstation.set_enabled(driverstation, enabled)
-          {:ok, %{successful: true}}
+          if driverstation != nil do
+            Nevermore.Driverstation.set_enabled(driverstation, enabled)
+            {:ok, %{successful: true}}
+          else
+            {:error, "That team is not connected to the field or is not in this match."}
+          end
         else
-          {:error, "That team is not connected to the field or is not in this match."}
+          {:error, "Not Authenticated"}
         end
       end)
     end
@@ -60,14 +68,18 @@ defmodule NevermoreWeb.Schema.Driverstation do
       arg(:team_number, non_null(:integer))
       arg(:emergency_stop, non_null(:boolean))
 
-      resolve(fn %{team_number: team_number, emergency_stop: emergency_stop}, _ ->
-        driverstation = get_driverstation_by_team(team_number)
+      resolve(fn %{team_number: team_number, emergency_stop: emergency_stop}, res ->
+        if Map.has_key?(res.context, :user) do
+          driverstation = get_driverstation_by_team(team_number)
 
-        if driverstation != nil do
-          Nevermore.Driverstation.set_e_stopped(driverstation, emergency_stop)
-          {:ok, %{successful: true}}
+          if driverstation != nil do
+            Nevermore.Driverstation.set_e_stopped(driverstation, emergency_stop)
+            {:ok, %{successful: true}}
+          else
+            {:error, "That team is not connected to the field or is not in this match."}
+          end
         else
-          {:error, "That team is not connected to the field or is not in this match."}
+          {:error, "Not Authenticated"}
         end
       end)
     end
@@ -81,8 +93,12 @@ defmodule NevermoreWeb.Schema.Driverstation do
         {:ok, topic: "driverstation_update_#{args.team_number}"}
       end)
 
-      resolve(fn driverstation, _, _ ->
-        {:ok, driverstation}
+      resolve(fn driverstation, _, res ->
+        if Map.has_key?(res.context, :user) do
+          {:ok, driverstation}
+        else
+          {:error, "Not Authenticated"}
+        end
       end)
     end
   end

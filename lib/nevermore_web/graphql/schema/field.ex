@@ -50,50 +50,71 @@ defmodule NevermoreWeb.Schema.Field do
 
   object :field_queries do
     field :field_state, :field_state do
-      resolve(fn _, _ ->
-        state = Nevermore.Field.get_state()
+      resolve(fn _, res ->
+        if Map.has_key?(res.context, :user) do
+          Nevermore.Field.unpause_field()
+          state = Nevermore.Field.get_state()
 
-        team_num_to_alliance_station =
-          Enum.reduce(state.team_num_to_alliance_station, [], fn {team, station}, list ->
-            if team != nil do
-              list ++ [%{team: Nevermore.Repo.get(Nevermore.Team, team), station: station}]
-            else
-              list
-            end
-          end)
+          team_num_to_alliance_station =
+            Enum.reduce(state.team_num_to_alliance_station, [], fn {team, station}, list ->
+              if team != nil do
+                list ++ [%{team: Nevermore.Repo.get(Nevermore.Team, team), station: station}]
+              else
+                list
+              end
+            end)
 
-        state = Map.put(state, :ip, :inet.ntoa(state.ip))
-        {:ok, Map.put(state, :team_num_to_alliance_station, team_num_to_alliance_station)}
+          state = Map.put(state, :ip, :inet.ntoa(state.ip))
+          {:ok, Map.put(state, :team_num_to_alliance_station, team_num_to_alliance_station)}
+        else
+          {:error, "Not Authenticated"}
+        end
       end)
     end
   end
 
   object :field_mutations do
     field :start_field, :success do
-      resolve(fn _, _ ->
-        Nevermore.Field.start_field()
-        {:ok, %{successful: true}}
+      resolve(fn _, res ->
+        if Map.has_key?(res.context, :user) do
+          Nevermore.Field.start_field()
+          {:ok, %{successful: true}}
+        else
+          {:error, "Not Authenticated"}
+        end
       end)
     end
 
     field :stop_field, :success do
-      resolve(fn _, _ ->
-        Nevermore.Field.stop_field()
-        {:ok, %{successful: true}}
+      resolve(fn _, res ->
+        if Map.has_key?(res.context, :user) do
+          Nevermore.Field.stop_field()
+          {:ok, %{successful: true}}
+        else
+          {:error, "Not Authenticated"}
+        end
       end)
     end
 
     field :pause_field, :success do
-      resolve(fn _, _ ->
-        Nevermore.Field.pause_field()
-        {:ok, %{successful: true}}
+      resolve(fn _, res ->
+        if Map.has_key?(res.context, :user) do
+          Nevermore.Field.pause_field()
+          {:ok, %{successful: true}}
+        else
+          {:error, "Not Authenticated"}
+        end
       end)
     end
 
     field :unpause_field, :success do
-      resolve(fn _, _ ->
-        Nevermore.Field.unpause_field()
-        {:ok, %{successful: true}}
+      resolve(fn _, res ->
+        if Map.has_key?(res.context, :user) do
+          Nevermore.Field.unpause_field()
+          {:ok, %{successful: true}}
+        else
+          {:error, "Not Authenticated"}
+        end
       end)
     end
 
@@ -107,19 +128,23 @@ defmodule NevermoreWeb.Schema.Field do
       arg(:blue2, :integer)
       arg(:blue3, :integer)
 
-      resolve(fn args, _ ->
-        Nevermore.Field.setup_field(
-          args.match_num,
-          args.tournament_level,
-          value_or_nil(args, :red1),
-          value_or_nil(args, :red2),
-          value_or_nil(args, :red3),
-          value_or_nil(args, :blue1),
-          value_or_nil(args, :blue2),
-          value_or_nil(args, :blue3)
-        )
+      resolve(fn args, res ->
+        if Map.has_key?(res.context, :user) do
+          Nevermore.Field.setup_field(
+            args.match_num,
+            args.tournament_level,
+            value_or_nil(args, :red1),
+            value_or_nil(args, :red2),
+            value_or_nil(args, :red3),
+            value_or_nil(args, :blue1),
+            value_or_nil(args, :blue2),
+            value_or_nil(args, :blue3)
+          )
 
-        {:ok, %{successful: true}}
+          {:ok, %{successful: true}}
+        else
+          {:error, "Not Authenticated"}
+        end
       end)
     end
   end
@@ -130,8 +155,12 @@ defmodule NevermoreWeb.Schema.Field do
         {:ok, topic: "field_state_update"}
       end)
 
-      resolve(fn field_state, _, _ ->
-        {:ok, field_state}
+      resolve(fn field_state, _, res ->
+        if Map.has_key?(res.context, :user) do
+          {:ok, field_state}
+        else
+          {:error, "Not Authenticated"}
+        end
       end)
     end
   end

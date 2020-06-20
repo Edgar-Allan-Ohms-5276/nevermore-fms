@@ -1,9 +1,9 @@
 defmodule NevermoreWeb.Schema.User do
   use Absinthe.Schema.Notation
+  use Absinthe.Relay.Schema.Notation, :classic
   import NevermoreWeb.Errors, only: [handle_errors: 1]
 
-  object :user do
-    field :id, :id
+  node object :user do
     field :name, :string
     field :email, :string
   end

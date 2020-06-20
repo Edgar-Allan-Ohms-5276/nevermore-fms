@@ -6,20 +6,28 @@ defmodule NevermoreWeb.Resolvers.User do
 
   def login(_, params, _) do
     with {:ok, user} <- Nevermore.Session.authenticate(params, Nevermore.Repo),
-         {:ok, jwt, _} <- Nevermore.Guardian.encode_and_sign(user, :access) do
-      {:ok, %{token: jwt}}
+         token <- Phoenix.Token.sign(NevermoreWeb.Endpoint, "user auth", user.id) do
+      {:ok, %{token: token}}
     end
   end
 
-  def update(_, params, _info) do
+  def update(_, params, %{context: %{user: _user}}) do
     Repo.get!(User, params.id)
     |> User.update_changeset(params)
     |> Repo.update()
   end
 
-  def create(_, params, _info) do
+  def update(_, _, _) do
+    {:error, "Not Authenticated"}
+  end
+
+  def create(_, params, %{context: %{user: _user}}) do
     %User{}
     |> User.registration_changeset(params)
     |> Repo.insert()
+  end
+
+  def create(_, _, _) do
+    {:error, "Not Authenticated"}
   end
 end

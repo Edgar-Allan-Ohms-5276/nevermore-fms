@@ -6,22 +6,19 @@ defmodule NevermoreWeb.Router do
   end
 
   pipeline :graphql do
-    plug Guardian.Plug.VerifyHeader, realm: "Bearer"
-    plug Guardian.Plug.LoadResource
     plug NevermoreWeb.GraphQL.Context
   end
 
-  scope "/graphql" do
+  scope "/api" do
     pipe_through :graphql
 
     forward "/graphql", Absinthe.Plug, schema: NevermoreWeb.Schema
+    forward "/playground",
+            Absinthe.Plug.GraphiQL,
+            schema: NevermoreWeb.Schema,
+            socket: NevermoreWeb.UserSocket,
+            interface: :playground
   end
-
-  forward "/graphiql",
-          Absinthe.Plug.GraphiQL,
-          schema: NevermoreWeb.Schema,
-          socket: NevermoreWeb.UserSocket,
-          interface: :simple
 
   # Enables LiveDashboard only for development
   #
