@@ -1,5 +1,6 @@
 defmodule NevermoreWeb.Schema.MatchEvent do
   use Absinthe.Schema.Notation
+  use Absinthe.Relay.Schema.Notation, :classic
   import NevermoreWeb.Errors, only: [handle_errors: 1]
   import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
@@ -13,8 +14,7 @@ defmodule NevermoreWeb.Schema.MatchEvent do
     field :total_entries, :integer
   end
 
-  object :match_event do
-    field :id, :integer
+  node object(:match_event) do
     field :occurred_at, :datetime
     field :schedule, :schedule, resolve: dataloader(Nevermore.Repo)
     field :scheduled_match, :scheduled_match, resolve: dataloader(Nevermore.Repo)
@@ -31,13 +31,13 @@ defmodule NevermoreWeb.Schema.MatchEvent do
   object :match_event_queries do
     @desc "Retrieves all match events within the DB, based on the arguments."
     field :match_events, :match_event_page do
-      arg(:id, :integer)
+      arg(:id, :id)
       arg(:occurred_at, :datetime)
-      arg(:schedule, :integer)
-      arg(:scheduled_match, :integer)
-      arg(:match, :integer)
-      arg(:station_assignment, :integer)
-      arg(:alliance, :integer)
+      arg(:schedule, :id)
+      arg(:scheduled_match, :id)
+      arg(:match, :id)
+      arg(:station_assignment, :id)
+      arg(:alliance, :id)
       arg(:type, :string)
       arg(:alliance_change, :integer)
       arg(:notes, :string)
@@ -46,12 +46,6 @@ defmodule NevermoreWeb.Schema.MatchEvent do
       arg(:page, non_null(:integer))
       arg(:page_limit, non_null(:integer))
       resolve(handle_errors(&Resolvers.MatchEvent.list_match_events/3))
-    end
-
-    @desc "Retrieves a match event by it's ID."
-    field :match_event, :match_event do
-      arg(:id, non_null(:integer))
-      resolve(handle_errors(&Resolvers.MatchEvent.get_match_event/3))
     end
   end
 
@@ -62,40 +56,68 @@ defmodule NevermoreWeb.Schema.MatchEvent do
     @desc "Creates a new match event."
     field :create_match_event, type: :match_event do
       arg(:occurred_at, :datetime)
-      arg(:schedule, :integer)
-      arg(:scheduled_match, :integer)
-      arg(:match, :integer)
-      arg(:station_assignment, :integer)
-      arg(:alliance, :integer)
+      arg(:schedule, :id)
+      arg(:scheduled_match, :id)
+      arg(:match, :id)
+      arg(:station_assignment, :id)
+      arg(:alliance, :id)
       arg(:type, :string)
       arg(:alliance_change, :integer)
       arg(:notes, :string)
       arg(:inserted_at, :datetime)
       arg(:updated_at, :datetime)
-      resolve(handle_errors(&Resolvers.MatchEvent.create_match_event/3))
+
+      resolve(
+        handle_errors(
+          parsing_node_ids(&Resolvers.MatchEvent.create_match_event/2,
+            schedule: :schedule,
+            scheduled_match: :scheduled_match,
+            match: :match,
+            station_assignment: :station_assignment,
+            alliance: :alliance
+          )
+        )
+      )
     end
 
     @desc "Updates a match event."
     field :update_match_event, type: :match_event do
-      arg(:id, non_null(:integer))
+      arg(:id, non_null(:id))
       arg(:occurred_at, :datetime)
-      arg(:schedule, :integer)
-      arg(:scheduled_match, :integer)
-      arg(:match, :integer)
-      arg(:station_assignment, :integer)
-      arg(:alliance, :integer)
+      arg(:schedule, :id)
+      arg(:scheduled_match, :id)
+      arg(:match, :id)
+      arg(:station_assignment, :id)
+      arg(:alliance, :id)
       arg(:type, :string)
       arg(:alliance_change, :integer)
       arg(:notes, :string)
       arg(:inserted_at, :datetime)
       arg(:updated_at, :datetime)
-      resolve(handle_errors(&Resolvers.MatchEvent.update_match_event/3))
+
+      resolve(
+        handle_errors(
+          parsing_node_ids(&Resolvers.MatchEvent.update_match_event/2,
+            id: :match_event,
+            schedule: :schedule,
+            scheduled_match: :scheduled_match,
+            match: :match,
+            station_assignment: :station_assignment,
+            alliance: :alliance
+          )
+        )
+      )
     end
 
     @desc "Deletes a match event."
     field :delete_match_event, type: :match_event do
-      arg(:id, non_null(:integer))
-      resolve(handle_errors(&Resolvers.MatchEvent.delete_match_event/3))
+      arg(:id, non_null(:id))
+
+      resolve(
+        handle_errors(
+          parsing_node_ids(&Resolvers.MatchEvent.delete_match_event/2, id: :match_event)
+        )
+      )
     end
   end
 end

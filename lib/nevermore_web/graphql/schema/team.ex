@@ -1,5 +1,6 @@
 defmodule NevermoreWeb.Schema.Team do
   use Absinthe.Schema.Notation
+  use Absinthe.Relay.Schema.Notation, :classic
   import NevermoreWeb.Errors, only: [handle_errors: 1]
   import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
@@ -13,8 +14,7 @@ defmodule NevermoreWeb.Schema.Team do
     field :total_entries, :integer
   end
 
-  object :team do
-    field :id, :id
+  node object(:team) do
     field :name, :string
     field :logo_url, :string
     field :song_url, :string
@@ -49,13 +49,7 @@ defmodule NevermoreWeb.Schema.Team do
       arg(:notes, :string)
       arg(:page, non_null(:integer))
       arg(:page_limit, non_null(:integer))
-      resolve(handle_errors(&Resolvers.Team.list_teams/3))
-    end
-
-    @desc "Retrieves a team by it's ID."
-    field :team, :team do
-      arg(:id, non_null(:integer))
-      resolve(handle_errors(&Resolvers.Team.get_team/3))
+      resolve(handle_errors(parsing_node_ids(&Resolvers.Team.list_teams/2, id: :team)))
     end
   end
 
@@ -123,13 +117,13 @@ defmodule NevermoreWeb.Schema.Team do
       arg(:school, :string)
       arg(:website, :string)
       arg(:notes, :string)
-      resolve(handle_errors(&Resolvers.Team.update_team/3))
+      resolve(handle_errors(parsing_node_ids(&Resolvers.Team.update_team/2, id: :team)))
     end
 
     @desc "Deletes a team."
     field :delete_team, type: :team do
-      arg(:id, non_null(:integer))
-      resolve(handle_errors(&Resolvers.Team.delete_team/3))
+      arg(:id, non_null(:id))
+      resolve(handle_errors(parsing_node_ids(&Resolvers.Team.delete_team/2, id: :team)))
     end
   end
 end

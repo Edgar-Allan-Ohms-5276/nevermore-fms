@@ -1,5 +1,6 @@
 defmodule NevermoreWeb.Schema.Alliance do
   use Absinthe.Schema.Notation
+  use Absinthe.Relay.Schema.Notation, :classic
   import NevermoreWeb.Errors, only: [handle_errors: 1]
   import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
@@ -13,8 +14,7 @@ defmodule NevermoreWeb.Schema.Alliance do
     field :total_entries, :integer
   end
 
-  object :alliance do
-    field :id, :integer
+  node object(:alliance) do
     field :name, :string
     field :teams, list_of(:team), resolve: dataloader(Nevermore.Repo)
     field :notes, :string
@@ -25,18 +25,12 @@ defmodule NevermoreWeb.Schema.Alliance do
   object :alliance_queries do
     @desc "Retrieves all alliances within the DB, based on the arguments."
     field :alliances, :alliance_page do
-      arg(:id, :integer)
+      arg(:id, :id)
       arg(:name, :string)
       arg(:notes, :string)
       arg(:page, non_null(:integer))
       arg(:page_limit, non_null(:integer))
       resolve(handle_errors(&Resolvers.Alliance.list_alliances/3))
-    end
-
-    @desc "Retrieves a alliance by it's ID."
-    field :alliance, :alliance do
-      arg(:id, non_null(:integer))
-      resolve(handle_errors(&Resolvers.Alliance.get_alliance/3))
     end
   end
 
@@ -47,24 +41,35 @@ defmodule NevermoreWeb.Schema.Alliance do
     @desc "Creates a new alliance."
     field :create_alliance, type: :alliance do
       arg(:name, :string)
-      arg(:teams, list_of(:integer))
+      arg(:teams, list_of(:id))
       arg(:notes, :string)
-      resolve(handle_errors(&Resolvers.Alliance.create_alliance/3))
+
+      resolve(
+        handle_errors(parsing_node_ids(&Resolvers.Alliance.create_alliance/2, teams: :team))
+      )
     end
 
     @desc "Updates a alliance."
     field :update_alliance, type: :alliance do
-      arg(:id, non_null(:integer))
+      arg(:id, non_null(:id))
       arg(:name, :string)
-      arg(:teams, list_of(:integer))
+      arg(:teams, list_of(:id))
       arg(:notes, :string)
-      resolve(handle_errors(&Resolvers.Alliance.update_alliance/3))
+
+      resolve(
+        handle_errors(
+          parsing_node_ids(&Resolvers.Alliance.update_alliance/2, id: :alliance, teams: :team)
+        )
+      )
     end
 
     @desc "Deletes a alliance."
     field :delete_alliance, type: :alliance do
-      arg(:id, non_null(:integer))
-      resolve(handle_errors(&Resolvers.Alliance.delete_alliance/3))
+      arg(:id, non_null(:id))
+
+      resolve(
+        handle_errors(parsing_node_ids(&Resolvers.Alliance.delete_alliance/2, id: :alliance))
+      )
     end
   end
 end

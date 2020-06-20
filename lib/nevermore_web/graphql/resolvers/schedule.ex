@@ -2,17 +2,7 @@ defmodule NevermoreWeb.Resolvers.Schedule do
   import Ecto.Query, only: [from: 2]
   import NevermoreWeb.GraphQL.Helpers
 
-  def get_schedule(_parent, args, _resolution) do
-    doc = Nevermore.Repo.get(Nevermore.Schedule, args.id)
-
-    if doc != nil do
-      {:ok, doc}
-    else
-      {:error, "Could not find that row."}
-    end
-  end
-
-  def list_schedules(_parent, args, _resolution) do
+  def list_schedules(args, _resolution) do
     {page, page_limit, args} = get_page_attrs(args)
     query = from Nevermore.Schedule, where: ^Map.to_list(args)
     {:ok, Nevermore.Repo.paginate(query, page: page, page_size: page_limit)}
@@ -24,7 +14,7 @@ defmodule NevermoreWeb.Resolvers.Schedule do
     Nevermore.Repo.insert(changeset)
   end
 
-  def update_schedule(_parent, args, _resolution) do
+  def update_schedule(args, _resolution) do
     doc = Nevermore.Repo.get(Nevermore.Schedule, args.id)
 
     if doc != nil do
@@ -34,7 +24,7 @@ defmodule NevermoreWeb.Resolvers.Schedule do
     end
   end
 
-  def delete_schedule(_parent, args, _resolution) do
+  def delete_schedule(args, _resolution) do
     doc = Nevermore.Repo.get(Nevermore.Schedule, args.id)
 
     if doc != nil do

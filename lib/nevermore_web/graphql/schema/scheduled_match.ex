@@ -1,5 +1,6 @@
 defmodule NevermoreWeb.Schema.ScheduledMatch do
   use Absinthe.Schema.Notation
+  use Absinthe.Relay.Schema.Notation, :classic
   import NevermoreWeb.Errors, only: [handle_errors: 1]
   import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
@@ -13,8 +14,7 @@ defmodule NevermoreWeb.Schema.ScheduledMatch do
     field :total_entries, :integer
   end
 
-  object :scheduled_match do
-    field :id, :integer
+  node object(:scheduled_match) do
     field :schedule, :schedule, resolve: dataloader(Nevermore.Repo)
     field :red_station, :station_assignment, resolve: dataloader(Nevermore.Repo)
     field :blue_station, :station_assignment, resolve: dataloader(Nevermore.Repo)
@@ -29,22 +29,24 @@ defmodule NevermoreWeb.Schema.ScheduledMatch do
   object :scheduled_match_queries do
     @desc "Retrieves all scheduled matches within the DB, based on the arguments."
     field :scheduled_matches, :scheduled_match_page do
-      arg(:id, :integer)
-      arg(:schedule, :integer)
-      arg(:red_station, :integer)
-      arg(:blue_station, :integer)
-      arg(:match_penalties, :integer)
+      arg(:id, :id)
+      arg(:schedule, :id)
+      arg(:red_station, :id)
+      arg(:blue_station, :id)
       arg(:scheduled_start, :datetime)
       arg(:notes, :string)
       arg(:page, non_null(:integer))
       arg(:page_limit, non_null(:integer))
-      resolve(handle_errors(&Resolvers.ScheduledMatch.list_scheduled_matches/3))
-    end
 
-    @desc "Retrieves a scheduled match by it's ID."
-    field :scheduled_match, :scheduled_match do
-      arg(:id, non_null(:integer))
-      resolve(handle_errors(&Resolvers.ScheduledMatch.get_scheduled_match/3))
+      resolve(
+        handle_errors(
+          parsing_node_ids(&Resolvers.ScheduledMatch.list_scheduled_matches/2,
+            id: :scheduled_match,
+            schedule: :schedule,
+            red_station: :station_assignment
+          )
+        )
+      )
     end
   end
 
@@ -54,31 +56,55 @@ defmodule NevermoreWeb.Schema.ScheduledMatch do
     # ------------------------------------------------------------------------------------------------------
     @desc "Creates a new scheduled match."
     field :create_scheduled_match, type: :scheduled_match do
-      arg(:schedule, :integer)
-      arg(:red_station, :integer)
-      arg(:blue_station, :integer)
-      arg(:match_penalties, :integer)
+      arg(:schedule, :id)
+      arg(:red_station, :id)
+      arg(:blue_station, :id)
       arg(:scheduled_start, :datetime)
       arg(:notes, :string)
-      resolve(handle_errors(&Resolvers.ScheduledMatch.create_scheduled_match/3))
+
+      resolve(
+        handle_errors(
+          parsing_node_ids(&Resolvers.ScheduledMatch.create_scheduled_match/2,
+            schedule: :schedule,
+            red_station: :station_assignment,
+            blue_station: :station_assignment
+          )
+        )
+      )
     end
 
     @desc "Updates a scheduled match."
     field :update_scheduled_match, type: :scheduled_match do
-      arg(:id, non_null(:integer))
-      arg(:schedule, :integer)
-      arg(:red_station, :integer)
-      arg(:blue_station, :integer)
-      arg(:match_penalties, :integer)
+      arg(:id, non_null(:id))
+      arg(:schedule, :id)
+      arg(:red_station, :id)
+      arg(:blue_station, :id)
       arg(:scheduled_start, :datetime)
       arg(:notes, :string)
-      resolve(handle_errors(&Resolvers.ScheduledMatch.update_scheduled_match/3))
+
+      resolve(
+        handle_errors(
+          parsing_node_ids(&Resolvers.ScheduledMatch.update_scheduled_match/2,
+            id: :scheduled_match,
+            schedule: :schedule,
+            red_station: :station_assignment,
+            blue_station: :station_assignment
+          )
+        )
+      )
     end
 
     @desc "Deletes a scheduled match."
     field :delete_scheduled_match, type: :scheduled_match do
-      arg(:id, non_null(:integer))
-      resolve(handle_errors(&Resolvers.ScheduledMatch.delete_scheduled_match/3))
+      arg(:id, non_null(:id))
+
+      resolve(
+        handle_errors(
+          parsing_node_ids(&Resolvers.ScheduledMatch.delete_scheduled_match/2,
+            id: :scheduled_match
+          )
+        )
+      )
     end
   end
 end

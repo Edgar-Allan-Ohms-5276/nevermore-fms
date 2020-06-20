@@ -1,5 +1,6 @@
 defmodule NevermoreWeb.Schema.Schedule do
   use Absinthe.Schema.Notation
+  use Absinthe.Relay.Schema.Notation, :classic
   import NevermoreWeb.Errors, only: [handle_errors: 1]
   import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
@@ -13,8 +14,7 @@ defmodule NevermoreWeb.Schema.Schedule do
     field :total_entries, :integer
   end
 
-  object :schedule do
-    field :id, :integer
+  node object(:schedule) do
     field :name, :string
     field :teams, list_of(:team), resolve: dataloader(Nevermore.Repo)
     field :scheduled_matches, list_of(:scheduled_match), resolve: dataloader(Nevermore.Repo)
@@ -27,18 +27,15 @@ defmodule NevermoreWeb.Schema.Schedule do
   object :schedule_queries do
     @desc "Retrieves all schedules within the DB, based on the arguments."
     field :schedules, :schedule_page do
-      arg(:id, :integer)
+      arg(:id, :id)
       arg(:name, :string)
       arg(:notes, :string)
       arg(:page, non_null(:integer))
       arg(:page_limit, non_null(:integer))
-      resolve(handle_errors(&Resolvers.Schedule.list_schedules/3))
-    end
 
-    @desc "Retrieves a schedule by it's ID."
-    field :schedule, :schedule do
-      arg(:id, non_null(:integer))
-      resolve(handle_errors(&Resolvers.Schedule.get_schedule/3))
+      resolve(
+        handle_errors(parsing_node_ids(&Resolvers.Schedule.list_schedules/2, id: :schedule))
+      )
     end
   end
 
@@ -55,16 +52,22 @@ defmodule NevermoreWeb.Schema.Schedule do
 
     @desc "Updates a schedule."
     field :update_schedule, type: :schedule do
-      arg(:id, :integer)
+      arg(:id, non_null(:id))
       arg(:name, :string)
       arg(:notes, :string)
-      resolve(handle_errors(&Resolvers.Schedule.update_schedule/3))
+
+      resolve(
+        handle_errors(parsing_node_ids(&Resolvers.Schedule.update_schedule/2, id: :schedule))
+      )
     end
 
     @desc "Deletes a schedule."
     field :delete_schedule, type: :schedule do
-      arg(:id, non_null(:integer))
-      resolve(handle_errors(&Resolvers.Schedule.delete_schedule/3))
+      arg(:id, non_null(:id))
+
+      resolve(
+        handle_errors(parsing_node_ids(&Resolvers.Schedule.delete_schedule/2, id: :schedule))
+      )
     end
   end
 end

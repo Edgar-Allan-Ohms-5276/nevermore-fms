@@ -108,6 +108,7 @@ defmodule Nevermore.Field do
 
   def handle_info(:retry_bind_udp, state) do
     original_state = state
+
     socket =
       case :gen_udp.open(state.udp_port, [:list, ip: state.ip]) do
         {:error, _} ->
@@ -303,6 +304,7 @@ defmodule Nevermore.Field do
   """
   def handle_info(:start_field, state) do
     original_state = state
+
     state =
       Map.put(
         state,
@@ -322,6 +324,7 @@ defmodule Nevermore.Field do
   """
   def handle_info({:stop_field, is_early}, state) do
     original_state = state
+
     state =
       if is_early do
         state = Map.put(state, :match_state, Enums.state_done())
@@ -439,7 +442,7 @@ defmodule Nevermore.Field do
       if driverstation != nil do
         send(
           driverstation,
-          {:tick, state.match_state, state.time_left, state.f, state.match_num,
+          {:tick, state.match_state, state.time_left, state.match_level, state.match_num,
            state.udp_socket}
         )
       end
@@ -466,15 +469,22 @@ defmodule Nevermore.Field do
 
   defp check_state_and_publish(original_state, new_state) do
     if original_state != new_state do
-      team_num_to_alliance_station = Enum.reduce(new_state.team_num_to_alliance_station, [], fn {team, station}, list ->
-        if team != nil do
-          list ++ [%{team: Nevermore.Repo.get(Nevermore.Team, team), station: station}]
-        else
-          list
-        end
-      end)
+      team_num_to_alliance_station =
+        Enum.reduce(new_state.team_num_to_alliance_station, [], fn {team, station}, list ->
+          if team != nil do
+            list ++ [%{team: Nevermore.Repo.get(Nevermore.Team, team), station: station}]
+          else
+            list
+          end
+        end)
+
       new_state = Map.put(new_state, :ip, :inet.ntoa(new_state.ip))
-      Absinthe.Subscription.publish(NevermoreWeb.Endpoint, Map.put(new_state, :team_num_to_alliance_station, team_num_to_alliance_station), field_state_update: "field_state_update")
+
+      Absinthe.Subscription.publish(
+        NevermoreWeb.Endpoint,
+        Map.put(new_state, :team_num_to_alliance_station, team_num_to_alliance_station),
+        field_state_update: "field_state_update"
+      )
     end
   end
 
@@ -565,9 +575,9 @@ defmodule Nevermore.Field do
   Returns:
     Nothing
   """
-  @spec pause_match() :: none()
-  def pause_match() do
-    send(Nevermore.Field, :pause_match)
+  @spec pause_field() :: none()
+  def pause_field() do
+    send(Nevermore.Field, :pause_field)
   end
 
   @doc """
@@ -579,8 +589,8 @@ defmodule Nevermore.Field do
   Returns:
     Nothing
   """
-  @spec unpause_match() :: none()
-  def unpause_match() do
-    send(Nevermore.Field, :unpause_match)
+  @spec unpause_field() :: none()
+  def unpause_field() do
+    send(Nevermore.Field, :unpause_field)
   end
 end

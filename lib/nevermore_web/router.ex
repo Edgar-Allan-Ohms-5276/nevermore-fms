@@ -5,7 +5,17 @@ defmodule NevermoreWeb.Router do
     plug :accepts, ["json"]
   end
 
-  forward "/graphql", Absinthe.Plug, schema: NevermoreWeb.Schema
+  pipeline :graphql do
+    plug Guardian.Plug.VerifyHeader, realm: "Bearer"
+    plug Guardian.Plug.LoadResource
+    plug NevermoreWeb.GraphQL.Context
+  end
+
+  scope "/graphql" do
+    pipe_through :graphql
+
+    forward "/graphql", Absinthe.Plug, schema: NevermoreWeb.Schema
+  end
 
   forward "/graphiql",
           Absinthe.Plug.GraphiQL,

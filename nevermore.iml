@@ -10,8 +10,11 @@
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/absinthe" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/absinthe_phoenix" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/absinthe_plug" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/absinthe_relay" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/bcrypt_elixir" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/certifi" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/combine" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/comeonin" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/connection" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/cowboy" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/cowlib" />
@@ -20,11 +23,14 @@
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/decimal" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/ecto" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/ecto_sql" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/elixir_make" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/gettext" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/guardian" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/hackney" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/httpoison" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/idna" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/jason" />
+      <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/jose" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/metrics" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/mime" />
       <excludeFolder url="file://$MODULE_DIR$/_build/dev/lib/mimerl" />
@@ -150,5 +156,20 @@
     <orderEntry type="library" name="httparrot" level="project" />
     <orderEntry type="library" name="scrivener_ecto" level="project" />
     <orderEntry type="library" name="scrivener" level="project" />
+    <orderEntry type="library" name="guardian" level="project" />
+    <orderEntry type="library" name="comeonin" level="project" />
+    <orderEntry type="library" name="bcrypt_elixir" level="project" />
+    <orderEntry type="library" name="jose" level="project" />
+    <orderEntry type="library" name="credo" level="project" />
+    <orderEntry type="library" name="argon2_elixir" level="project" />
+    <orderEntry type="library" name="pbkdf2_elixir" level="project" />
+    <orderEntry type="library" name="elixir_make" level="project" />
+    <orderEntry type="library" name="jsone" level="project" />
+    <orderEntry type="library" name="jsx" level="project" />
+    <orderEntry type="library" name="libdecaf" level="project" />
+    <orderEntry type="library" name="libsodium" level="project" />
+    <orderEntry type="library" name="ojson" level="project" />
+    <orderEntry type="library" name="poison" level="project" />
+    <orderEntry type="library" name="absinthe_relay" level="project" />
   </component>
 </module>

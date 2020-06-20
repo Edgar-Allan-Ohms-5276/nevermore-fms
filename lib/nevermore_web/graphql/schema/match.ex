@@ -1,5 +1,6 @@
 defmodule NevermoreWeb.Schema.Match do
   use Absinthe.Schema.Notation
+  use Absinthe.Relay.Schema.Notation, :classic
   import NevermoreWeb.Errors, only: [handle_errors: 1]
   import Absinthe.Resolution.Helpers, only: [dataloader: 1]
 
@@ -13,8 +14,7 @@ defmodule NevermoreWeb.Schema.Match do
     field :total_entries, :integer
   end
 
-  object :match do
-    field :id, :integer
+  node object(:match) do
     field :schedule, :schedule, resolve: dataloader(Nevermore.Repo)
     field :scheduled_match, :scheduled_match, resolve: dataloader(Nevermore.Repo)
     field :match_events, list_of(:match_event), resolve: dataloader(Nevermore.Repo)
@@ -29,8 +29,8 @@ defmodule NevermoreWeb.Schema.Match do
   object :match_queries do
     @desc "Retrieves all matches within the DB, based on the arguments."
     field :matches, :match_page do
-      arg(:id, :integer)
-      arg(:schedule, :integer)
+      arg(:id, :id)
+      arg(:schedule, :id)
       arg(:scheduled_match, :integer)
       arg(:start_time, :datetime)
       arg(:end_time, :datetime)
@@ -38,12 +38,6 @@ defmodule NevermoreWeb.Schema.Match do
       arg(:page, non_null(:integer))
       arg(:page_limit, non_null(:integer))
       resolve(handle_errors(&Resolvers.Match.list_matches/3))
-    end
-
-    @desc "Retrieves a match by it's ID."
-    field :match, :match do
-      arg(:id, non_null(:integer))
-      resolve(handle_errors(&Resolvers.Match.get_match/3))
     end
   end
 
@@ -53,29 +47,37 @@ defmodule NevermoreWeb.Schema.Match do
     # ------------------------------------------------------------------------------------------------------
     @desc "Creates a new match."
     field :create_match, type: :match do
-      arg(:schedule, :integer)
+      arg(:schedule, :id)
       arg(:scheduled_match, :integer)
       arg(:start_time, :datetime)
       arg(:end_time, :datetime)
       arg(:notes, :string)
-      resolve(handle_errors(&Resolvers.Match.create_match/3))
+
+      resolve(
+        handle_errors(parsing_node_ids(&Resolvers.Match.create_match/2, schedule: :schedule))
+      )
     end
 
     @desc "Updates a match."
     field :update_match, type: :match do
-      arg(:id, non_null(:integer))
+      arg(:id, non_null(:id))
       arg(:schedule, :integer)
       arg(:scheduled_match, :integer)
       arg(:start_time, :datetime)
       arg(:end_time, :datetime)
       arg(:notes, :string)
-      resolve(handle_errors(&Resolvers.Match.create_match/3))
+
+      resolve(
+        handle_errors(
+          parsing_node_ids(&Resolvers.Match.create_match/2, id: :match, schedule: :schedule)
+        )
+      )
     end
 
     @desc "Deletes a match."
     field :delete_match, type: :match do
-      arg(:id, non_null(:integer))
-      resolve(handle_errors(&Resolvers.Match.delete_match/3))
+      arg(:id, non_null(:id))
+      resolve(handle_errors(parsing_node_ids(&Resolvers.Match.delete_match/2, id: :match)))
     end
   end
 end

@@ -149,6 +149,7 @@ defmodule Nevermore.Driverstation do
 
   def handle_info({:tick, match_state, time_left, match_level, match_num, udp_socket}, state) do
     original_state = state
+
     if Duration.diff(Duration.now(), state.last_udp_message_time, :seconds) > 2 do
       send(self(), :kick)
       {:noreply, state}
@@ -260,7 +261,9 @@ defmodule Nevermore.Driverstation do
 
   defp check_state_and_publish(original_state, new_state) do
     if original_state != new_state do
-      Absinthe.Subscription.publish(NevermoreWeb.Endpoint, new_state, driverstation_update: "driverstation_update_#{new_state.team_num}")
+      Absinthe.Subscription.publish(NevermoreWeb.Endpoint, new_state,
+        driverstation_update: "driverstation_update_#{new_state.team_num}"
+      )
     end
   end
 
