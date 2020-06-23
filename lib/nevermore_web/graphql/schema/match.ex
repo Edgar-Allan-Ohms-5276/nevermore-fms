@@ -35,8 +35,8 @@ defmodule NevermoreWeb.Schema.Match do
       arg(:start_time, :datetime)
       arg(:end_time, :datetime)
       arg(:notes, :string)
-      arg(:page, non_null(:integer))
-      arg(:page_limit, non_null(:integer))
+      arg(:page, :integer, default_value: 1)
+      arg(:page_limit, :integer, default_value: 20)
       resolve(handle_errors(&Resolvers.Match.list_matches/3))
     end
   end

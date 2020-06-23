@@ -47,8 +47,9 @@ defmodule NevermoreWeb.Schema.Team do
       arg(:school, :string)
       arg(:website, :string)
       arg(:notes, :string)
-      arg(:page, non_null(:integer))
-      arg(:page_limit, non_null(:integer))
+      arg(:page, :integer, default_value: 1)
+      arg(:page_limit, :integer, default_value: 20)
+
       resolve(handle_errors(parsing_node_ids(&Resolvers.Team.list_teams/2, id: :team)))
     end
   end

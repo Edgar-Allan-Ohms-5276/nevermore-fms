@@ -30,8 +30,8 @@ defmodule NevermoreWeb.Schema.Schedule do
       arg(:id, :id)
       arg(:name, :string)
       arg(:notes, :string)
-      arg(:page, non_null(:integer))
-      arg(:page_limit, non_null(:integer))
+      arg(:page, :integer, default_value: 1)
+      arg(:page_limit, :integer, default_value: 20)
 
       resolve(
         handle_errors(parsing_node_ids(&Resolvers.Schedule.list_schedules/2, id: :schedule))

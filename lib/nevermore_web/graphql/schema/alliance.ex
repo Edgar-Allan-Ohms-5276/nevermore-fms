@@ -28,8 +28,8 @@ defmodule NevermoreWeb.Schema.Alliance do
       arg(:id, :id)
       arg(:name, :string)
       arg(:notes, :string)
-      arg(:page, non_null(:integer))
-      arg(:page_limit, non_null(:integer))
+      arg(:page, :integer, default_value: 1)
+      arg(:page_limit, :integer, default_value: 20)
       resolve(handle_errors(&Resolvers.Alliance.list_alliances/3))
     end
   end

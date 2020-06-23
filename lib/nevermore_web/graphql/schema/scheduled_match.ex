@@ -35,8 +35,8 @@ defmodule NevermoreWeb.Schema.ScheduledMatch do
       arg(:blue_station, :id)
       arg(:scheduled_start, :datetime)
       arg(:notes, :string)
-      arg(:page, non_null(:integer))
-      arg(:page_limit, non_null(:integer))
+      arg(:page, :integer, default_value: 1)
+      arg(:page_limit, :integer, default_value: 20)
 
       resolve(
         handle_errors(

@@ -43,8 +43,8 @@ defmodule NevermoreWeb.Schema.MatchEvent do
       arg(:notes, :string)
       arg(:inserted_at, :datetime)
       arg(:updated_at, :datetime)
-      arg(:page, non_null(:integer))
-      arg(:page_limit, non_null(:integer))
+      arg(:page, :integer, default_value: 1)
+      arg(:page_limit, :integer, default_value: 20)
       resolve(handle_errors(&Resolvers.MatchEvent.list_match_events/3))
     end
   end
