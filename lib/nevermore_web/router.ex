@@ -1,5 +1,6 @@
 defmodule NevermoreWeb.Router do
   use NevermoreWeb, :router
+  use Plug.ErrorHandler
 
   pipeline :api do
     plug :accepts, ["json"]
