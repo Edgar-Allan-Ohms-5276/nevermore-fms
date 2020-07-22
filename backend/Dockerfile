@@ -4,8 +4,7 @@ FROM bitwalker/alpine-elixir-phoenix:latest
 EXPOSE 5000
 ENV PORT=5000 MIX_ENV=prod
 
-RUN useradd -ms /bin/bash admin
-RUN chown -R admin:admin .
+RUN chown -R root:root .
 RUN chmod 755 .
 
 
@@ -15,6 +14,6 @@ RUN mix do deps.get, deps.compile
 
 ADD . .
 
-USER admin
+USER root
 
 CMD ["mix", "phx.server"]
