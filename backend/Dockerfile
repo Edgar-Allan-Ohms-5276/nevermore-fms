@@ -10,8 +10,4 @@ RUN mix do deps.get, deps.compile
 
 ADD . .
 
-USER default
-
-RUN sudo chown default -R /opt/app/_build
-
 CMD ["mix", "phx.server"]
