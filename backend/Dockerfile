@@ -12,6 +12,6 @@ ADD . .
 
 USER default
 
-RUN chown default -R /opt/app/_build
+RUN sudo chown default -R /opt/app/_build
 
 CMD ["mix", "phx.server"]
