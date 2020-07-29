@@ -14,10 +14,10 @@ backend-docker-build-application:
   extends: .backend-docker-build
   variables: 
     DOCKERFILE: "Dockerfile-app"
-    IMAFGE_NAME: "application"
+    IMAGE_NAME: "application"
 
 backend-docker-build-migrations:
   extends: .backend-docker-build
   variables: 
     DOCKERFILE: "Dockerfile-migrations"
-    IMAFGE_NAME: "migrations"
+    IMAGE_NAME: "migrations"
