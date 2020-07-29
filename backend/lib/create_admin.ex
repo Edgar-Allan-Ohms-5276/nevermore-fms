@@ -6,7 +6,7 @@ defmodule Mix.Tasks.CreateAdmin do
 
   @shortdoc "Creates a new admin. `mix create_admin Test test@test.com testtest`"
   def run(args) do
-    User{}
+    %User{}
     |> User.registration_changeset(%{ name: Enum.at(args, 0), email: Enum.at(args, 1), password: Enum.at(args, 2)})
     |> Repo.insert()
   end
