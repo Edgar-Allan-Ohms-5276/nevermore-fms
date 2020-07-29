@@ -1,6 +1,4 @@
-# This file is a template, and might need editing before it works on your project.
-backend-docker-build-master:
-  # Official docker image.
+.backend-docker-build:
   image: docker:latest
   stage: build
   services:
@@ -9,22 +7,17 @@ backend-docker-build-master:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - cd backend
-    - docker build --pull -t "$CI_REGISTRY_IMAGE" .
-    - docker push "$CI_REGISTRY_IMAGE"
-  only:
-    - master
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" - < $DOCKERFILE
+    - docker push "$CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG"
 
-backend-docker-build:
-  # Official docker image.
-  image: docker:latest
-  stage: build
-  services:
-    - docker:dind
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-  script:
-    - cd backend
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" .
-    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
-  except:
-    - master
+backend-docker-build-application:
+  extends: .backend-docker-build
+  variables: 
+    DOCKERFILE: "Dockerfile-app"
+    IMAFGE_NAME: "application"
+
+backend-docker-build-migrations:
+  extends: .backend-docker-build
+  variables: 
+    DOCKERFILE: "Dockerfile-migrations"
+    IMAFGE_NAME: "migrations"
