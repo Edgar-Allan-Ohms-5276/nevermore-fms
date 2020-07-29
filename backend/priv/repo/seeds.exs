@@ -9,3 +9,7 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+%Nevermore.Accounts.User{}
+    |> Nevermore.Accounts.User.registration_changeset(%{name: "Admin", email: "admin@edgarallanohms.com", password: "password"})
+    |> Nevermore.Repo.insert()
