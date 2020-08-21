@@ -19,6 +19,7 @@ defmodule NevermoreWeb.Schema.Match do
     field :scheduled_match, :scheduled_match, resolve: dataloader(Nevermore.Repo)
     field :match_events, list_of(:match_event), resolve: dataloader(Nevermore.Repo)
     field :match_penalties, list_of(:match_penalty), resolve: dataloader(Nevermore.Repo)
+    field :final, :boolean
     field :start_time, :datetime
     field :end_time, :datetime
     field :notes, :string
@@ -32,6 +33,7 @@ defmodule NevermoreWeb.Schema.Match do
       arg(:id, :id)
       arg(:schedule, :id)
       arg(:scheduled_match, :integer)
+      arg(:final, :boolean)
       arg(:start_time, :datetime)
       arg(:end_time, :datetime)
       arg(:notes, :string)
@@ -49,6 +51,7 @@ defmodule NevermoreWeb.Schema.Match do
     field :create_match, type: :match do
       arg(:schedule, :id)
       arg(:scheduled_match, :integer)
+      arg(:final, :boolean)
       arg(:start_time, :datetime)
       arg(:end_time, :datetime)
       arg(:notes, :string)
@@ -63,6 +66,7 @@ defmodule NevermoreWeb.Schema.Match do
       arg(:id, non_null(:id))
       arg(:schedule, :integer)
       arg(:scheduled_match, :integer)
+      arg(:final, :boolean)
       arg(:start_time, :datetime)
       arg(:end_time, :datetime)
       arg(:notes, :string)

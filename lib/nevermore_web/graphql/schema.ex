@@ -15,6 +15,7 @@ defmodule NevermoreWeb.Schema do
   import_types(NevermoreWeb.Schema.Field)
   import_types(NevermoreWeb.Schema.Driverstation)
   import_types(NevermoreWeb.Schema.User)
+  import_types(NevermoreWeb.Schema.Network)
 
   node interface do
     resolve_type(fn
@@ -131,12 +132,16 @@ defmodule NevermoreWeb.Schema do
     import_fields(:driverstation_mutations)
 
     import_fields(:user_mutations)
+    
+    import_fields(:network_mutations)
   end
 
   subscription do
     import_fields(:field_subscriptions)
 
     import_fields(:driverstation_subscriptions)
+
+    import_fields(:network_subscriptions)
   end
 
   def context(ctx) do

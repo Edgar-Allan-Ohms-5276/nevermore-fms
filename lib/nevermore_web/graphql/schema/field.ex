@@ -151,16 +151,13 @@ defmodule NevermoreWeb.Schema.Field do
 
   object :field_subscriptions do
     field :field_state_update, :field_state do
+
       config(fn _, _ ->
         {:ok, topic: "field_state_update"}
       end)
 
-      resolve(fn field_state, _, res ->
-        if Map.has_key?(res.context, :user) do
-          {:ok, field_state}
-        else
-          {:error, "Not Authenticated"}
-        end
+      resolve(fn field_state, _, _ ->
+        {:ok, field_state}
       end)
     end
   end

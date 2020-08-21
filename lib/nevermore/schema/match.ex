@@ -5,6 +5,7 @@ defmodule Nevermore.Match do
   schema "matches" do
     field :end_time, :naive_datetime
     field :notes, :string
+    field :final, :boolean
     field :start_time, :naive_datetime
     belongs_to :schedule, Nevermore.Schedule
     belongs_to :scheduled_match, Nevermore.ScheduledMatch

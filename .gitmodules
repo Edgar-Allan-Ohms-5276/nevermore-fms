@@ -1,0 +1,3 @@
+[submodule "fms-hardware-control"]
+	path = fms-hardware-control
+	url = git@gitlab.com:edgar-allan-ohms/fms-hardware-control.git
