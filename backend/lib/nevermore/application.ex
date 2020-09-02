@@ -6,21 +6,18 @@ defmodule Nevermore.Application do
   use Application
 
   def start(_type, _args) do
+    # List all child processes to be supervised
     children = [
       # Start the Ecto repository
       Nevermore.Repo,
-      # Start the Telemetry supervisor
-      NevermoreWeb.Telemetry,
-      # Start the PubSub system
-      {Phoenix.PubSub, name: Nevermore.PubSub},
-      # Start the Endpoint (http/https)
+      # Start the endpoint when the application starts
       NevermoreWeb.Endpoint,
-      # Subscription Socket
-      {Absinthe.Subscription, NevermoreWeb.Endpoint},
       # Start the Field
       Nevermore.Field,
       # Start Field Supervisor
       {DynamicSupervisor, strategy: :one_for_one, name: Nevermore.Field.DynamicSupervisor}
+      # Starts a worker by calling: Nevermore.Worker.start_link(arg)
+      # {Nevermore.Worker, arg},
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

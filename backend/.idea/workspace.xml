@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="2519bb75-143e-425d-94d4-877881c51a5a" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/bcrypt_elixir.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/comeonin.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/credo.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/deep_merge.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/elixir_make.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/ex_guard.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/guardian.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/jose.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/jsone.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/jsx.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/libdecaf.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/libsodium.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/ojson.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/poison.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/benchee.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/benchee.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/nevermore.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/nevermore.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/.babelrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/css/app.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/css/phoenix.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/js/app.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/js/socket.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/static/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/static/images/phoenix.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/static/robots.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/webpack.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/config.exs" beforeDir="false" afterPath="$PROJECT_DIR$/config/config.exs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/nevermore/application.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/nevermore/application.ex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/nevermore_field/driverstation.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/nevermore_field/driverstation.ex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/nevermore_field/field.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/nevermore_field/field.ex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/nevermore_field/field_manager.ex" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/nevermore_field/timing.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/nevermore_field/timing.ex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/nevermore_pubsub/field.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/nevermore_pubsub/field.ex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/nevermore_pubsub/field_manager.ex" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/nevermore_web.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/nevermore_web.ex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/nevermore_web/controllers/page_controller.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/nevermore_web/controllers/page_controller.ex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/nevermore_web/endpoint.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/nevermore_web/endpoint.ex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/nevermore_web/live/test_view.ex" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/nevermore_web/router.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/nevermore_web/router.ex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/nevermore_web/templates/page/index.html.eex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/nevermore_web/templates/page/protected.html.eex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/nevermore_web/templates/test/index.html.leex" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/nevermore_web/views/test_view.ex" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mix.exs" beforeDir="false" afterPath="$PROJECT_DIR$/mix.exs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mix.lock" beforeDir="false" afterPath="$PROJECT_DIR$/mix.lock" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Elixir GenServer" />
+        <option value="Elixir Module" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="GqFEEeEa" />
+  </component>
+  <component name="ProjectId" id="1Z01jlgHNwPWEOIoz2ZXmjrB53m" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2519bb75-143e-425d-94d4-877881c51a5a" name="Default Changelist" comment="" />
+      <created>1583961335481</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1583961335481</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="154" y="0" key="SettingsEditor" timestamp="1584152045487">
+      <screen x="0" y="0" width="1344" height="800" />
+    </state>
+    <state x="154" y="0" key="SettingsEditor/0.0.1344.800@0.0.1344.800" timestamp="1584152045487" />
+    <state x="492" y="285" key="com.intellij.ide.util.TipDialog" timestamp="1591971365268">
+      <screen x="0" y="0" width="1440" height="860" />
+    </state>
+    <state x="492" y="285" key="com.intellij.ide.util.TipDialog/0.0.1440.860@0.0.1440.860" timestamp="1591971365268" />
+    <state x="656" y="345" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040/3840.0.1344.800@0.0.1920.1040" timestamp="1588685546225" />
+    <state x="656" y="345" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1585511433684" />
+    <state x="2151" y="-10" width="1385" height="1025" maximized="true" key="dock-window-1" timestamp="1584981620720">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2151" y="-10" width="1385" height="1025" maximized="true" key="dock-window-1/0.0.1920.1040/1920.0.1920.1040/3840.0.1344.800@0.0.1920.1040" timestamp="1584981620720" />
+    <state x="342" y="133" key="new project wizard" timestamp="1585511682999">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="342" y="133" key="new project wizard/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1585511682999" />
+    <state x="379" y="197" key="run.anything.popup" timestamp="1584629745354">
+      <screen x="0" y="0" width="1440" height="860" />
+    </state>
+    <state x="379" y="197" key="run.anything.popup/0.0.1440.860@0.0.1440.860" timestamp="1584629745354" />
+    <state x="623" y="225" key="search.everywhere.popup" timestamp="1584982843475">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" key="search.everywhere.popup/0.0.1920.1040/1920.0.1920.1040/3840.0.1344.800@0.0.1920.1040" timestamp="1584982843475" />
+  </component>
+</project>

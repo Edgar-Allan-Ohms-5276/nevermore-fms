@@ -12,7 +12,7 @@ defmodule NevermoreWeb.ConnCase do
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
   by setting `use NevermoreWeb.ConnCase, async: true`, although
-  this option is not recommended for other databases.
+  this option is not recommendded for other databases.
   """
 
   use ExUnit.CaseTemplate
@@ -20,10 +20,7 @@ defmodule NevermoreWeb.ConnCase do
   using do
     quote do
       # Import conveniences for testing with connections
-      import Plug.Conn
-      import Phoenix.ConnTest
-      import NevermoreWeb.ConnCase
-
+      use Phoenix.ConnTest
       alias NevermoreWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing

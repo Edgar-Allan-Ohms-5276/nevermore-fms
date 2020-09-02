@@ -1,0 +1,28 @@
+<%= if @field_state.udp_error != nil || @field_state.tcp_error != nil do %>
+   <h1>The field couldn't bind to 10.0.100.5</h1>
+   <p>Please fix the problem in order to continue!</p>
+<% else %>
+   <h1>Current Field: </h1>
+   <div><h2><%= @field_state.time_left %></h2></div>
+   <h2>Setup the Current Field: </h2>
+   <div>
+     <%= f = form_for :setup, "#", [phx_submit: "submit"] %>
+       <%= number_input f, :match_num %>
+       <%= number_input f, :tournament_level %>
+       <%= number_input f, :red1 %>
+       <%= number_input f, :red2 %>
+       <%= number_input f, :red3 %>
+       <%= number_input f, :blue1 %>
+       <%= number_input f, :blue2 %>
+       <%= number_input f, :blue3 %>
+
+       <%= submit "Setup Match" %>
+     </form>
+   </div>
+
+   <a class="waves-effect waves-light btn" phx-click="start">start match</a>
+   <a class="waves-effect waves-light btn" phx-click="stop">stop match</a>
+   <a class="waves-effect waves-light btn" phx-click="send_game_data">send game data</a>
+
+
+<% end %>
