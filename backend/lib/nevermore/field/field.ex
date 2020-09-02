@@ -245,6 +245,15 @@ defmodule Nevermore.Field do
       )
     end)
 
+    spawn(fn ->
+      {logs, exit_code} = System.cmd("sh", ["fms-hardware-control/03A-WIFI-PRESTART.sh", to_string(red1), to_string(red2), to_string(red3), to_string(blue1), to_string(blue2), to_string(blue3), to_string(red1), to_string(red2), to_string(red3), to_string(blue1), to_string(blue2), to_string(blue3), "true"], env: [{"ROUTER_PASSWORD", Application.get_env(:nevermore, :router_password)}])
+      Absinthe.Subscription.publish(
+        NevermoreWeb.Endpoint,
+        %{log_message: logs, status: exit_code},
+        network_prestart_wifi: "network_prestart_wifi_update"
+      )
+    end)
+
     check_state_and_publish(original_state, state)
 
     {:noreply, state}

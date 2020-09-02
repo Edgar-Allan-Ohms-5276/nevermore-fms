@@ -74,6 +74,23 @@ defmodule NevermoreWeb.Schema.Network do
       end
     end
 
+    field :network_init_router, :success do
+      arg(:router_type, non_null(:router_type))
+      resolve fn _, args, _ ->
+        spawn fn ->
+          # First check that router is not already configured.
+          {logs, exit_code} = System.cmd("sh", ["fms-hardware-control/01A-ROUTER-INIT.sh", args.router_type], env: [{"ROUTER_PASSWORD", Application.get_env(:nevermore, :router_password)}]) # Password is same as Phoenix secret.
+          Process.sleep(1000)
+          Absinthe.Subscription.publish(
+            NevermoreWeb.Endpoint,
+            %{log_message: logs, status: exit_code},
+            network_init_router: "network_init_router_update"
+          )
+        end
+        {:ok, %{successful: true}}
+      end
+    end
+
   end
 
   object :network_subscriptions do
@@ -101,6 +118,16 @@ defmodule NevermoreWeb.Schema.Network do
     field :network_prestart_router, :prestart_status_packet do
       config(fn _, _ ->
         {:ok, topic: "network_prestart_router_update"}
+      end)
+
+      resolve(fn state, _, _ ->
+        {:ok, state}
+      end)
+    end
+
+    field :network_prestart_wifi, :prestart_status_packet do
+      config(fn _, _ ->
+        {:ok, topic: "network_prestart_wifi_update"}
       end)
 
       resolve(fn state, _, _ ->

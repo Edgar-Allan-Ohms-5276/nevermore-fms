@@ -10,7 +10,7 @@ use Mix.Config
 config :nevermore,
   ecto_repos: [Nevermore.Repo],
   tba_key: "9nWENhLxjJKUJI0Cl9ab79nE9JddOvWdyHobalIsKnmL4becqRYGoAZNFSh2V6mK", # This is an example key.
-  router_password: "n9iu23n94iuf3i0nj94rfin90v34i9nvin9u34n9uijf45ytg45"
+  router_password: "yeetbread"
 
 # Configures the endpoint
 config :nevermore, NevermoreWeb.Endpoint,

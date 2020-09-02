@@ -1,20 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="162fb3ca-dac8-4793-8397-e194aebbdec2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fms-hardware-control" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/config.exs" beforeDir="false" afterPath="$PROJECT_DIR$/config/config.exs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/dev.exs" beforeDir="false" afterPath="$PROJECT_DIR$/config/dev.exs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/prod.exs" beforeDir="false" afterPath="$PROJECT_DIR$/config/prod.exs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/nevermore/field/driverstation.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/nevermore/field/driverstation.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/nevermore/field/field.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/nevermore/field/field.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/nevermore/schema/match.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/nevermore/schema/match.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/nevermore_web/graphql/schema.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/nevermore_web/graphql/schema.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/nevermore_web/graphql/schema/field.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/nevermore_web/graphql/schema/field.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/nevermore_web/graphql/schema/match.ex" beforeDir="false" afterPath="$PROJECT_DIR$/lib/nevermore_web/graphql/schema/match.ex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/priv/repo/migrations/20200612204704_create_matches.exs" beforeDir="false" afterPath="$PROJECT_DIR$/priv/repo/migrations/20200612204704_create_matches.exs" afterDir="false" />
-    </list>
+    <list default="true" id="162fb3ca-dac8-4793-8397-e194aebbdec2" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -28,7 +15,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/fms-hardware-control" />
   </component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="GKYaeIMc" />
@@ -69,10 +56,18 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
+    <state x="176" y="86" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1599076805779">
+      <screen x="0" y="0" width="1440" height="860" />
+    </state>
+    <state x="176" y="86" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.860@0.0.1440.860" timestamp="1599076805779" />
     <state x="416" y="256" key="com.intellij.ide.util.TipDialog" timestamp="1599075553306">
       <screen x="0" y="0" width="1440" height="860" />
     </state>
     <state x="416" y="256" key="com.intellij.ide.util.TipDialog/0.0.1440.860@0.0.1440.860" timestamp="1599075553306" />
     <state x="555" y="310" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1596907711273" />
+    <state x="379" y="197" key="run.anything.popup" timestamp="1599076861074">
+      <screen x="0" y="0" width="1440" height="860" />
+    </state>
+    <state x="379" y="197" key="run.anything.popup/0.0.1440.860@0.0.1440.860" timestamp="1599076861074" />
   </component>
 </project>
