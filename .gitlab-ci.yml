@@ -6,6 +6,8 @@
   tags:
     - roboticon-live
     - docker
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR/backend --dockerfile $CI_PROJECT_DIR/backend/$DOCKERFILE --destination $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG
@@ -15,6 +17,7 @@ backend-docker-build-application:
   variables: 
     DOCKERFILE: "Dockerfile-app"
     IMAGE_NAME: "application"
+    GIT_SUBMODULE_STRATEGY: recursive
 
 backend-docker-build-migrations:
   extends: .backend-docker-build
