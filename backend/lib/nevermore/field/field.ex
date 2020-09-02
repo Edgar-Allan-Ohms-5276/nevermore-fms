@@ -237,7 +237,7 @@ defmodule Nevermore.Field do
     state = Map.put(state, :match_state, Enums.state_notready())
 
     spawn(fn ->
-      {logs, exit_code} = System.cmd("sh", ["fms-hardware-control/03-ROUTER-PRESTART.sh", to_string(red1), to_string(red2), to_string(red3), to_string(blue1), to_string(blue2), to_string(blue3)], env: [{"ROUTER_PASSWORD", Application.get_env(:nevermore, :router_password)}])
+      {logs, exit_code} = System.cmd("sh", ["fms-hardware-control/03-ROUTER-PRESTART.sh", to_string(red1), to_string(red2), to_string(red3), to_string(blue1), to_string(blue2), to_string(blue3)], env: [{"ROUTER_PASSWORD", "yeetbread"}])
       IO.puts(logs)
       Absinthe.Subscription.publish(
         NevermoreWeb.Endpoint,
@@ -245,9 +245,9 @@ defmodule Nevermore.Field do
         network_prestart_router: "network_prestart_router_update"
       )
     end)
-
+# Application.get_env(:nevermore, :router_password)
     spawn(fn ->
-      {logs, exit_code} = System.cmd("sh", ["fms-hardware-control/03A-WIFI-PRESTART.sh", to_string(red1), to_string(red1), to_string(red2), to_string(red2), to_string(red3), to_string(red3), to_string(blue1), to_string(blue1), to_string(blue2), to_string(blue2), to_string(blue3), to_string(blue3), "true"], env: [{"CONTROLLER_PASSWORD", Application.get_env(:nevermore, :router_password)}])
+      {logs, exit_code} = System.cmd("sh", ["fms-hardware-control/03A-WIFI-PRESTART.sh", to_string(red1), to_string(red1), to_string(red2), to_string(red2), to_string(red3), to_string(red3), to_string(blue1), to_string(blue1), to_string(blue2), to_string(blue2), to_string(blue3), to_string(blue3), "true"], env: [{"CONTROLLER_PASSWORD", "yeetbread"}])
       IO.puts(logs)
       Absinthe.Subscription.publish(
         NevermoreWeb.Endpoint,
