@@ -161,5 +161,6 @@
     <orderEntry type="library" name="html_entities" level="project" />
     <orderEntry type="library" name="nimble_parsec" level="project" />
     <orderEntry type="library" name="mix_test_watch" level="project" />
+    <orderEntry type="library" name="dialyze" level="project" />
   </component>
 </module>

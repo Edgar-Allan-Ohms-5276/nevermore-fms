@@ -28,7 +28,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="GKYaeIMc" />
@@ -69,10 +69,10 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="416" y="256" key="com.intellij.ide.util.TipDialog" timestamp="1599073939110">
+    <state x="416" y="256" key="com.intellij.ide.util.TipDialog" timestamp="1599075553306">
       <screen x="0" y="0" width="1440" height="860" />
     </state>
-    <state x="416" y="256" key="com.intellij.ide.util.TipDialog/0.0.1440.860@0.0.1440.860" timestamp="1599073939110" />
+    <state x="416" y="256" key="com.intellij.ide.util.TipDialog/0.0.1440.860@0.0.1440.860" timestamp="1599075553306" />
     <state x="555" y="310" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1596907711273" />
   </component>
 </project>
