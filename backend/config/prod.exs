@@ -14,7 +14,7 @@ config :nevermore, NevermoreWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
-config :logger, level: :info
+config :logger, level: :warn
 
 # ## SSL Support
 #
@@ -25,11 +25,11 @@ config :logger, level: :info
 #       ...
 #       url: [host: "example.com", port: 443],
 #       https: [
-#         :inet6,
 #         port: 443,
 #         cipher_suite: :strong,
 #         keyfile: System.get_env("SOME_APP_SSL_KEY_PATH"),
-#         certfile: System.get_env("SOME_APP_SSL_CERT_PATH")
+#         certfile: System.get_env("SOME_APP_SSL_CERT_PATH"),
+#         transport_options: [socket_opts: [:inet6]]
 #       ]
 #
 # The `cipher_suite` is set to `:strong` to support only the

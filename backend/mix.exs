@@ -5,7 +5,7 @@ defmodule Nevermore.MixProject do
     [
       app: :nevermore,
       version: "0.1.0",
-      elixir: "~> 1.5",
+      elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -20,7 +20,7 @@ defmodule Nevermore.MixProject do
   def application do
     [
       mod: {Nevermore.Application, []},
-      extra_applications: [:logger, :runtime_tools, :postgrex, :timex]
+      extra_applications: [:logger, :runtime_tools, :timex, :httpoison, :scrivener]
     ]
   end
 
@@ -33,36 +33,40 @@ defmodule Nevermore.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.4.11"},
-      {:phoenix_pubsub, "~> 1.1"},
-      {:phoenix_ecto, "~> 4.0"},
-      {:ecto_sql, "~> 3.1"},
+      {:phoenix, "~> 1.5.3"},
+      {:phoenix_ecto, "~> 4.1"},
+      {:ecto_sql, "~> 3.4"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 2.11"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:phoenix_live_dashboard, "~> 0.2.0"},
+      {:telemetry_metrics, "~> 0.4"},
+      {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:timex, "~> 3.5"},
-      #{:phoenix_live_view, "~> 0.9.0"},
-      {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"},
-      {:benchee, "~> 1.0", only: :dev},
-      {:guardian, "~> 2.1.1"},
-      {:bcrypt_elixir, "~> 2.0"}
+      {:timex, "~> 3.0"},
+      {:absinthe_phoenix, "~> 2.0"},
+      {:dataloader, "~> 1.0.0"},
+      {:httpoison, "~> 1.6"},
+      {:scrivener_ecto, "~> 2.0"},
+      {:scrivener, "~> 2.0"},
+      {:comeonin, "~> 4.0"},
+      {:bcrypt_elixir, "~> 1.0"},
+      {:absinthe_relay, "~> 1.4.0-rc or ~> 1.4"}
     ]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
-  # For example, to create, migrate and run the seeds file at once:
+  # For example, to install project dependencies and perform other setup tasks, run:
   #
-  #     $ mix ecto.setup
+  #     $ mix setup
   #
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
+      setup: ["deps.get", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
     ]
   end
 end

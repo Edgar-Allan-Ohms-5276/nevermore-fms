@@ -2,10 +2,13 @@ use Mix.Config
 
 # Configure your database
 config :nevermore, Nevermore.Repo,
-       database: "nevermore_dev",
-       username: "postgres",
-       password: "test",
-       hostname: "localhost"
+  username: "postgres",
+  password: "postgres",
+  database: "nevermore_dev",
+  hostname: "localhost",
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -18,15 +21,7 @@ config :nevermore, NevermoreWeb.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: [
-    node: [
-      "node_modules/webpack/bin/webpack.js",
-      "--mode",
-      "development",
-      "--watch-stdin",
-      cd: Path.expand("../assets", __DIR__)
-    ]
-  ]
+  watchers: []
 
 # ## SSL Support
 #
@@ -51,17 +46,6 @@ config :nevermore, NevermoreWeb.Endpoint,
 # If desired, both `http:` and `https:` keys can be
 # configured to run both http and https servers on
 # different ports.
-
-# Watch static and templates for browser reloading.
-config :nevermore, NevermoreWeb.Endpoint,
-  live_reload: [
-    patterns: [
-      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
-      ~r"priv/gettext/.*(po)$",
-      ~r"lib/nevermore_web/{live,views}/.*(ex)$",
-      ~r"lib/nevermore_web/templates/.*(eex)$"
-    ]
-  ]
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

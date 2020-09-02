@@ -7,29 +7,18 @@
 # General application configuration
 use Mix.Config
 
-config :nevermore, Nevermore.Repo,
-  database: "nevermore_repo",
-  username: "user",
-  password: "pass",
-  hostname: "localhost"
-
-config :nevermore, Nevermore.UserManager.Guardian,
-       issuer: "nevermore",
-       secret_key: "YYJf9ZTzCVv3yC5dvCVDL3ttcSB9pvTO9yuBTj2+Wjpk3QgG28M86C2pFlYUBFcT" # put the result of the mix command above here
-
 config :nevermore,
-  ecto_repos: [Nevermore.Repo]
-
+  ecto_repos: [Nevermore.Repo],
+  tba_key: "9nWENhLxjJKUJI0Cl9ab79nE9JddOvWdyHobalIsKnmL4becqRYGoAZNFSh2V6mK", # This is an example key.
+  router_password: "n9iu23n94iuf3i0nj94rfin90v34i9nvin9u34n9uijf45ytg45"
 
 # Configures the endpoint
 config :nevermore, NevermoreWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "Il+CsSGfAn4vXvHgOMfxizeNSZ8qGkPVYJ7GydB+ABN/a7eN7E23Wm6VTJs4esDd",
-  render_errors: [view: NevermoreWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Nevermore.PubSub, adapter: Phoenix.PubSub.PG2],
-  live_view: [
-    signing_salt: "R8lX/UzmwdwsWAPEwFrd011NZHSetvj6Bi3zImGSj8Zvw1T/w0OdNRybCQ5K/19q"
-  ]
+  secret_key_base: "94ffmHeQc96vUTwdMS2QcfOWsD8s7m6MmHbcu+w02RbrpbsAKkKdYZcs9FCenU+I", # This secret is only used in testing and development.
+  render_errors: [view: NevermoreWeb.ErrorView, accepts: ~w(json), layout: false],
+  pubsub_server: Nevermore.PubSub,
+  live_view: [signing_salt: "6S7kRuiJ"]
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -38,6 +27,7 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

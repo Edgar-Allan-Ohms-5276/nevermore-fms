@@ -2,6 +2,7 @@
   <library name="tzdata" type="mix">
     <CLASSES>
       <root url="file://$PROJECT_DIR$/_build/dev/lib/tzdata/ebin" />
+      <root url="file://$PROJECT_DIR$/_build/test/lib/tzdata/ebin" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
