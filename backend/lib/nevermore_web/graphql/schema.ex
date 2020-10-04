@@ -2,60 +2,24 @@ defmodule NevermoreWeb.GraphQL do
   use Absinthe.Schema
   use Absinthe.Relay.Schema, :classic
 
+  alias NevermoreWeb.GraphQL
+
   # Import Types and Handlers
-  import_types(NevermoreWeb.GraphQL.Types)
-  import_types(NevermoreWeb.GraphQL.Team)
-  import_types(NevermoreWeb.GraphQL.Schedule)
-  import_types(NevermoreWeb.GraphQL.Alliance)
-  import_types(NevermoreWeb.GraphQL.StationAssignment)
-  import_types(NevermoreWeb.GraphQL.ScheduledMatch)
-  import_types(NevermoreWeb.GraphQL.Match)
-  import_types(NevermoreWeb.GraphQL.MatchEvent)
-  import_types(NevermoreWeb.GraphQL.MatchPenalty)
-  import_types(NevermoreWeb.GraphQL.Field)
-  import_types(NevermoreWeb.GraphQL.Driverstation)
-  import_types(NevermoreWeb.GraphQL.User)
-  import_types(NevermoreWeb.GraphQL.Network)
+  import_types(GraphQL.Types)
+  import_types(GraphQL.Team)
+  import_types(GraphQL.Schedule)
+  import_types(GraphQL.Alliance)
+  import_types(GraphQL.StationAssignment)
+  import_types(GraphQL.ScheduledMatch)
+  import_types(GraphQL.Match)
+  import_types(GraphQL.MatchEvent)
+  import_types(GraphQL.MatchPenalty)
+  import_types(GraphQL.Field)
+  import_types(GraphQL.Driverstation)
+  import_types(GraphQL.User)
+  import_types(GraphQL.Network)
 
-  node interface do
-    resolve_type(fn
-      %{sponsors: _, school: _}, _ ->
-        :team
-
-      %{teams: _, name: _}, _ ->
-        :alliance
-
-      %{e_stopped: _, station: _}, _ ->
-        :driverstation
-
-      %{udp_port: _, event_name: _}, _ ->
-        :field
-
-      %{start_time: _, end_time: _, schedule: _}, _ ->
-        :match
-
-      %{occurred_at: _, type: _, alliance_change: _}, _ ->
-        :match_event
-
-      %{occurred_at: _, type: _}, _ ->
-        :match_penalty
-
-      %{scheduled_matches: _, name: _}, _ ->
-        :schedule
-
-      %{schedule: _, red_station: _}, _ ->
-        :scheduled_match
-
-      %{side: _, station_one: _}, _ ->
-        :station_assignment
-
-      %{email: _, name: _}, _ ->
-        :user
-
-      _, _ ->
-        nil
-    end)
-  end
+  import_types(GraphQL.Node)
 
   query do
     node field do
