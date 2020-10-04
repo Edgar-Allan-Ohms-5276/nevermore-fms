@@ -1,4 +1,4 @@
-defmodule NevermoreWeb.Schema.Field do
+defmodule NevermoreWeb.GraphQL.Field do
   use Absinthe.Schema.Notation
   use Absinthe.Relay.Schema.Notation, :classic
 

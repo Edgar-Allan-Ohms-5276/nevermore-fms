@@ -1,4 +1,4 @@
-defmodule NevermoreWeb.Schema.Network do
+defmodule NevermoreWeb.GraphQL.Network do
   use Absinthe.Schema.Notation
   use Absinthe.Relay.Schema.Notation, :classic
 
@@ -42,7 +42,7 @@ defmodule NevermoreWeb.Schema.Network do
             %{log_message: logs, status: exit_code},
             network_ping_router: "network_ping_router_update"
           )
-        
+
           if exit_code != 0 do
             # Then check if it is factory reset.
             {logs, exit_code} = System.cmd("sh", ["fms-hardware-control/01-ROUTER-SCAN.sh", "factory"], env: [{"ROUTER_PASSWORD", Application.get_env(:nevermore, :router_password)}]) # Password is same as Phoenix secret.

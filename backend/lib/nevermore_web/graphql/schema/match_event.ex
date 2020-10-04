@@ -1,4 +1,4 @@
-defmodule NevermoreWeb.Schema.MatchEvent do
+defmodule NevermoreWeb.GraphQL.MatchEvent do
   use Absinthe.Schema.Notation
   use Absinthe.Relay.Schema.Notation, :classic
   import NevermoreWeb.Errors, only: [handle_errors: 1]

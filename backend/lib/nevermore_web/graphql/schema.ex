@@ -1,21 +1,21 @@
-defmodule NevermoreWeb.Schema do
+defmodule NevermoreWeb.GraphQL do
   use Absinthe.Schema
   use Absinthe.Relay.Schema, :classic
 
   # Import Types and Handlers
-  import_types(NevermoreWeb.Schema.Types)
-  import_types(NevermoreWeb.Schema.Team)
-  import_types(NevermoreWeb.Schema.Schedule)
-  import_types(NevermoreWeb.Schema.Alliance)
-  import_types(NevermoreWeb.Schema.StationAssignment)
-  import_types(NevermoreWeb.Schema.ScheduledMatch)
-  import_types(NevermoreWeb.Schema.Match)
-  import_types(NevermoreWeb.Schema.MatchEvent)
-  import_types(NevermoreWeb.Schema.MatchPenalty)
-  import_types(NevermoreWeb.Schema.Field)
-  import_types(NevermoreWeb.Schema.Driverstation)
-  import_types(NevermoreWeb.Schema.User)
-  import_types(NevermoreWeb.Schema.Network)
+  import_types(NevermoreWeb.GraphQL.Types)
+  import_types(NevermoreWeb.GraphQL.Team)
+  import_types(NevermoreWeb.GraphQL.Schedule)
+  import_types(NevermoreWeb.GraphQL.Alliance)
+  import_types(NevermoreWeb.GraphQL.StationAssignment)
+  import_types(NevermoreWeb.GraphQL.ScheduledMatch)
+  import_types(NevermoreWeb.GraphQL.Match)
+  import_types(NevermoreWeb.GraphQL.MatchEvent)
+  import_types(NevermoreWeb.GraphQL.MatchPenalty)
+  import_types(NevermoreWeb.GraphQL.Field)
+  import_types(NevermoreWeb.GraphQL.Driverstation)
+  import_types(NevermoreWeb.GraphQL.User)
+  import_types(NevermoreWeb.GraphQL.Network)
 
   node interface do
     resolve_type(fn
@@ -132,7 +132,7 @@ defmodule NevermoreWeb.Schema do
     import_fields(:driverstation_mutations)
 
     import_fields(:user_mutations)
-    
+
     import_fields(:network_mutations)
   end
 

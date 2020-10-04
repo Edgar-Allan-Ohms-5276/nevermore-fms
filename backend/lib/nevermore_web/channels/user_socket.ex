@@ -2,7 +2,7 @@ defmodule NevermoreWeb.UserSocket do
   use Phoenix.Socket
 
   use Absinthe.Phoenix.Socket,
-    schema: NevermoreWeb.Schema
+    schema: NevermoreWeb.GraphQL
 
   def connect(_params, socket) do
     # current_user = current_user(params)

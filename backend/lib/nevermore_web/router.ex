@@ -13,10 +13,10 @@ defmodule NevermoreWeb.Router do
   scope "/api" do
     pipe_through :graphql
 
-    forward "/graphql", Absinthe.Plug, schema: NevermoreWeb.Schema
+    forward "/graphql", Absinthe.Plug, schema: NevermoreWeb.GraphQL
     forward "/playground",
             Absinthe.Plug.GraphiQL,
-            schema: NevermoreWeb.Schema,
+            schema: NevermoreWeb.GraphQL,
             socket: NevermoreWeb.UserSocket,
             interface: :playground
   end

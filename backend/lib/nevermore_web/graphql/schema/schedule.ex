@@ -1,4 +1,4 @@
-defmodule NevermoreWeb.Schema.Schedule do
+defmodule NevermoreWeb.GraphQL.Schedule do
   use Absinthe.Schema.Notation
   use Absinthe.Relay.Schema.Notation, :classic
   import NevermoreWeb.Errors, only: [handle_errors: 1]

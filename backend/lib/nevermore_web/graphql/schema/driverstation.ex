@@ -1,4 +1,4 @@
-defmodule NevermoreWeb.Schema.Driverstation do
+defmodule NevermoreWeb.GraphQL.Driverstation do
   use Absinthe.Schema.Notation
   use Absinthe.Relay.Schema.Notation, :classic
 
