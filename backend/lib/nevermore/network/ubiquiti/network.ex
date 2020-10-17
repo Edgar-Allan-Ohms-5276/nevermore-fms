@@ -23,18 +23,18 @@ defmodule Nevermore.Network.Ubiquiti.Network do
     {:ok, jar} = CookieJar.new()
     controller_login(jar, controller_username, controller_password)
 
-    {:ok, response} = HTTPoison.get(jar, "https://fms.nevermore:8443/api/s/default/rest/wlangroup")
+    {:ok, response} = HTTPoison.get(jar, "https://fms.nevermore:8443/api/s/default/rest/wlangroup", hackney: [:insecure])
     json_response = Jason.decode!(response.body)
 
     field_wlang_id = get_wlang_id_by_name(json_response.data, "Field")
 
     if field_wlang_id != nil do
-      {:ok, response} = HTTPoison.get(jar, "https://fms.nevermore:8443/api/s/default/rest/wlanconf")
+      {:ok, response} = HTTPoison.get(jar, "https://fms.nevermore:8443/api/s/default/rest/wlanconf", hackney: [:insecure])
       json_response = Jason.decode!(response.body)
 
       wlans = get_wlans_in_group(json_response.data, field_wlang_id)
       for wlan <- wlans do
-        _ = HTTPoison.delete(jar, "https://fms.nevermore:8443/api/s/default/rest/wlanconf/#{wlan["_id"]}")
+        _ = HTTPoison.delete(jar, "https://fms.nevermore:8443/api/s/default/rest/wlanconf/#{wlan["_id"]}", hackney: [:insecure])
       end
 
       for {_, ssid, wpa, vlan} <- stations do
@@ -74,7 +74,7 @@ defmodule Nevermore.Network.Ubiquiti.Network do
 
   defp controller_login(jar, username, password) do
     {:ok, response} =
-      HTTPoison.post(jar, "https://fms.nevermore:8443/api/login", %{"username" => username, "password" => password}, @header)
+      HTTPoison.post(jar, "https://fms.nevermore:8443/api/login", %{"username" => username, "password" => password}, @header, hackney: [:insecure])
 
     response_json = Jason.decode!(response.body)
 
@@ -161,6 +161,6 @@ defmodule Nevermore.Network.Ubiquiti.Network do
    }
    """
 
-   _ = HTTPoison.post(jar, "https://fms.nevermore:8443/api/s/default/rest/wlangroup", body, @header)
+   _ = HTTPoison.post(jar, "https://fms.nevermore:8443/api/s/default/rest/wlangroup", body, @header, hackney: [:insecure])
   end
 end
