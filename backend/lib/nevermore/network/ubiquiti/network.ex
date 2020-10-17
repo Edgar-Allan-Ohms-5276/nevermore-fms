@@ -49,9 +49,9 @@ defmodule Nevermore.Network.Ubiquiti.Network do
     ip_middle = to_string(div(team_num, 1000)) <> "." <> to_string(rem(team_num, 1000))
     vlan = station * 10
     station_name = if station <= 3 do
-      "RED" + station
+      "RED#{station}"
     else
-      "BLUE" + (station - 3)
+      "BLUE#{station - 3}"
     end
 
     EEx.eval_string(
