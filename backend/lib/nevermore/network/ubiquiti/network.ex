@@ -46,7 +46,7 @@ defmodule Nevermore.Network.Ubiquiti.Network do
   end
 
   defp get_router_command(station, team_num) do
-    ip_middle = to_string(div(team_num, 1000)) <> "." <> to_string(rem(team_num, 1000))
+    ip_middle = to_string(div(team_num, 100)) <> "." <> to_string(rem(team_num, 100))
     vlan = station * 10
     station_name = if station <= 3 do
       "RED#{station}"
@@ -74,7 +74,7 @@ defmodule Nevermore.Network.Ubiquiti.Network do
 
   defp controller_login(jar, username, password) do
     {:ok, response} =
-      HTTPoison.post(jar, "https://fms.nevermore:8443/api/login", %{"username" => username, "password" => password}, @header, hackney: [:insecure])
+      HTTPoison.post(jar, "https://fms.nevermore:8443/api/login", Jason.encode!(%{"username" => username, "password" => password}), @header, hackney: [:insecure])
 
     response_json = Jason.decode!(response.body)
 
