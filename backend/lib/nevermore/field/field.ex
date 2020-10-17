@@ -237,23 +237,20 @@ defmodule Nevermore.Field do
     state = Map.put(state, :match_state, Enums.state_notready())
 
     spawn(fn ->
-      {logs, exit_code} = System.cmd("sh", ["fms-hardware-control/03-ROUTER-PRESTART.sh", to_string(red1), to_string(red2), to_string(red3), to_string(blue1), to_string(blue2), to_string(blue3)], env: [{"ROUTER_PASSWORD", "yeetbread"}])
-      IO.puts(logs)
-      Absinthe.Subscription.publish(
-        NevermoreWeb.Endpoint,
-        %{log_message: logs, status: exit_code},
-        network_prestart_router: "network_prestart_router_update"
-      )
+      IO.puts("here1")
+      Nevermore.Network.Ubiquiti.Network.router_prestart!("yeetbread", [red1, red2, red3, blue1, blue2, blue3])
     end)
-# Application.get_env(:nevermore, :router_password)
+
     spawn(fn ->
-      {logs, exit_code} = System.cmd("sh", ["fms-hardware-control/03A-WIFI-PRESTART.sh", to_string(red1), to_string(red1), to_string(red2), to_string(red2), to_string(red3), to_string(red3), to_string(blue1), to_string(blue1), to_string(blue2), to_string(blue2), to_string(blue3), to_string(blue3), "true"], env: [{"CONTROLLER_PASSWORD", "yeetbread"}])
-      IO.puts(logs)
-      Absinthe.Subscription.publish(
-        NevermoreWeb.Endpoint,
-        %{log_message: logs, status: exit_code},
-        network_prestart_wifi: "network_prestart_wifi_update"
-      )
+      IO.puts("here2")
+      Nevermore.Network.Ubiquiti.Network.configure_wifi!("nevermore", "yeetbread", [
+        {red1, "Nevermore-#{red1}", "Nevermore-#{red1}", 11},
+        {red2, "Nevermore-#{red2}", "Nevermore-#{red2}", 12},
+        {red3, "Nevermore-#{red3}", "Nevermore-#{red3}", 13},
+        {blue1, "Nevermore-#{blue1}", "Nevermore-#{blue1}", 21},
+        {blue2, "Nevermore-#{blue2}", "Nevermore-#{blue2}", 22},
+        {blue3, "Nevermore-#{blue3}", "Nevermore-#{blue3}", 23}
+      ])
     end)
 
     check_state_and_publish(original_state, state)

@@ -7,6 +7,7 @@ defmodule Nevermore.Repo.Migrations.CreateMatches do
       add :end_time, :naive_datetime
       add :notes, :string
       add :final, :boolean
+      add :match_number, :integer
       add :schedule_id, references(:schedules, on_delete: :nothing)
       add :scheduled_match_id, references(:scheduled_matches, on_delete: :nothing)
 

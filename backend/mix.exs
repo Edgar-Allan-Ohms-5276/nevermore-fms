@@ -51,7 +51,9 @@ defmodule Nevermore.MixProject do
       {:scrivener, "~> 2.0"},
       {:comeonin, "~> 4.0"},
       {:bcrypt_elixir, "~> 1.0"},
-      {:absinthe_relay, "~> 1.4.0-rc or ~> 1.4"}
+      {:absinthe_relay, "~> 1.4.0-rc or ~> 1.4"},
+      {:sshex, "2.2.1"},
+      {:cookie_jar, "~> 1.0"}
     ]
   end
 

@@ -16,7 +16,7 @@ config :nevermore,
 config :nevermore, NevermoreWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "94ffmHeQc96vUTwdMS2QcfOWsD8s7m6MmHbcu+w02RbrpbsAKkKdYZcs9FCenU+I", # This secret is only used in testing and development.
-  render_errors: [view: NevermoreWeb.ErrorView, accepts: ~w(json), layout: false],
+  render_errors: [view: NevermoreWeb.ErrorView, accepts: ~w(json), layout: true],
   pubsub_server: Nevermore.PubSub,
   live_view: [signing_salt: "6S7kRuiJ"]
 
