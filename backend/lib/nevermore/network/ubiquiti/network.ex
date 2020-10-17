@@ -12,7 +12,7 @@ defmodule Nevermore.Network.Ubiquiti.Network do
     |> Enum.each(fn({team, index}) ->
       case SSHEx.run conn, get_router_command(index, team) do
         {:ok, _, 0} -> :ok
-        {:ok, res, _} -> raise res
+        {:ok, res, _} -> :ok
         {:error, res} -> raise res
         _ -> raise "Unknown Error"
       end
