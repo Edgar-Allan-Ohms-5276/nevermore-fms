@@ -56,6 +56,7 @@ defmodule Nevermore.Network.Ubiquiti.Network do
 
     EEx.eval_string(
 "
+<%= cw %> begin
 <%= cw %> delete interfaces ethernet eth0 vif <%= vlan %>
 <%= cw %> set interfaces ethernet eth0 vif <%= vlan %> description <%= station_name %>
 <%= cw %> set interfaces ethernet eth0 vif <%= vlan %> address 10.<%= ip_middle %>.254/24
@@ -66,6 +67,8 @@ defmodule Nevermore.Network.Ubiquiti.Network do
 <%= cw %> set service dhcp-server shared-network-name <%= station_name %> subnet 10.<%= ip_middle %>.0/24 start 10.<%= ip_middle %>.50 stop 10.<%= ip_middle %>.150
 <%= cw %> set service dhcp-server shared-network-name <%= station_name %> subnet 10.<%= ip_middle %>.0/24 default-router 10.<%= ip_middle %>.254
 <%= cw %> set service dhcp-server shared-network-name <%= station_name %> authoritative enable
+<%= cw %> commit
+<%= cw %> end
 ", cw: "/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper", ip_middle: ip_middle, vlan: vlan, station_name: station_name)
   end
 
