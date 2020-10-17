@@ -26,13 +26,13 @@ defmodule Nevermore.Network.Ubiquiti.Network do
     {:ok, response} = HTTPoison.get(jar, "https://fms.nevermore:8443/api/s/default/rest/wlangroup", hackney: [:insecure])
     json_response = Jason.decode!(response.body)
 
-    field_wlang_id = get_wlang_id_by_name(json_response.data, "Field")
+    field_wlang_id = get_wlang_id_by_name(json_response["data"], "Field")
 
     if field_wlang_id != nil do
       {:ok, response} = HTTPoison.get(jar, "https://fms.nevermore:8443/api/s/default/rest/wlanconf", hackney: [:insecure])
       json_response = Jason.decode!(response.body)
 
-      wlans = get_wlans_in_group(json_response.data, field_wlang_id)
+      wlans = get_wlans_in_group(json_response["data"], field_wlang_id)
       for wlan <- wlans do
         _ = HTTPoison.delete(jar, "https://fms.nevermore:8443/api/s/default/rest/wlanconf/#{wlan["_id"]}", hackney: [:insecure])
       end
@@ -78,7 +78,7 @@ defmodule Nevermore.Network.Ubiquiti.Network do
 
     response_json = Jason.decode!(response.body)
 
-    if response_json.meta.rc == "ok" do
+    if response_json["meta"]["rc"] == "ok" do
       :ok
     else
       {:error, "Invalid login"}
@@ -94,7 +94,7 @@ defmodule Nevermore.Network.Ubiquiti.Network do
       current_wlans
     else
       current_wlan = Enum.at(wlans, current_index)
-      if current_wlan.wlangroup_id == group_id do
+      if current_wlan["wlangroup_id"] == group_id do
         get_wlans_in_group_iter(wlans, current_index + 1, group_id, current_wlans ++ [current_wlan])
       else
         get_wlans_in_group_iter(wlans, current_index + 1, group_id, current_wlans)
@@ -111,7 +111,7 @@ defmodule Nevermore.Network.Ubiquiti.Network do
       nil
     else
       current_wlang = Enum.at(wlangs, current_index)
-      if current_wlang.name == name do
+      if current_wlang["name"] == name do
         current_wlang["_id"]
       else
         get_wlang_id_by_name_iter(wlangs, current_index + 1, name)
