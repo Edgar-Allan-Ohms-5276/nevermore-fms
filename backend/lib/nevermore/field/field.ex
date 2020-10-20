@@ -244,12 +244,12 @@ defmodule Nevermore.Field do
     spawn(fn ->
       IO.puts("here2")
       Nevermore.Network.Ubiquiti.Network.configure_wifi!("nevermore", "yeetbread", [
-        {red1, "Nevermore-#{red1}", "Nevermore-#{red1}", 11},
-        {red2, "Nevermore-#{red2}", "Nevermore-#{red2}", 12},
-        {red3, "Nevermore-#{red3}", "Nevermore-#{red3}", 13},
-        {blue1, "Nevermore-#{blue1}", "Nevermore-#{blue1}", 21},
-        {blue2, "Nevermore-#{blue2}", "Nevermore-#{blue2}", 22},
-        {blue3, "Nevermore-#{blue3}", "Nevermore-#{blue3}", 23}
+        {red1, "Nevermore#{red1}", "Nevermore#{red1}", 11},
+        {red2, "Nevermore#{red2}", "Nevermore#{red2}", 12},
+        {red3, "Nevermore#{red3}", "Nevermore#{red3}", 13},
+        {blue1, "Nevermore#{blue1}", "Nevermore#{blue1}", 21},
+        {blue2, "Nevermore#{blue2}", "Nevermore#{blue2}", 22},
+        {blue3, "Nevermore#{blue3}", "Nevermore#{blue3}", 23}
       ])
     end)
 

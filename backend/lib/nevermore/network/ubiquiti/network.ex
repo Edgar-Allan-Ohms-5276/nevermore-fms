@@ -10,12 +10,16 @@ defmodule Nevermore.Network.Ubiquiti.Network do
     teams
     |> Enum.with_index
     |> Enum.each(fn({team, index}) ->
-      case SSHEx.run conn, get_router_command(index, team) do
-        {:ok, _, 0} -> :ok
-        {:ok, res, _} -> :ok
-        {:error, res} -> raise res
-        _ -> raise "Unknown Error"
-      end
+      command = get_router_command(index + 1, team)
+      commands = String.split(command, "\n")
+      Enum.each(commands, fn(command) ->
+        case SSHEx.run conn, command do
+          {:ok, _, 0} -> :ok
+          {:ok, _, _} -> :ok
+          {:error, res} -> raise res
+          _ -> raise "Unknown Error"
+        end
+      end)
     end)
   end
 
@@ -23,18 +27,22 @@ defmodule Nevermore.Network.Ubiquiti.Network do
     {:ok, jar} = CookieJar.new()
     controller_login(jar, controller_username, controller_password)
 
-    {:ok, response} = HTTPoison.get(jar, "https://fms.nevermore:8443/api/s/default/rest/wlangroup", hackney: [:insecure])
+    {:ok, response} = HTTPoison.get(jar, "https://fms.nevermore:8443/api/s/default/rest/wlangroup", [], hackney: [:insecure])
     json_response = Jason.decode!(response.body)
 
-    field_wlang_id = get_wlang_id_by_name(json_response["data"], "Field")
+    IO.puts(response.body)
+
+    field_wlang_id = get_wlang_id_by_name(jar, json_response["data"], "Field")
+
+    IO.puts(field_wlang_id)
 
     if field_wlang_id != nil do
-      {:ok, response} = HTTPoison.get(jar, "https://fms.nevermore:8443/api/s/default/rest/wlanconf", hackney: [:insecure])
+      {:ok, response} = HTTPoison.get(jar, "https://fms.nevermore:8443/api/s/default/rest/wlanconf", [], hackney: [:insecure])
       json_response = Jason.decode!(response.body)
 
       wlans = get_wlans_in_group(json_response["data"], field_wlang_id)
       for wlan <- wlans do
-        _ = HTTPoison.delete(jar, "https://fms.nevermore:8443/api/s/default/rest/wlanconf/#{wlan["_id"]}", hackney: [:insecure])
+        _ = HTTPoison.delete(jar, "https://fms.nevermore:8443/api/s/default/rest/wlanconf/#{wlan["_id"]}", [], hackney: [:insecure])
       end
 
       for {_, ssid, wpa, vlan} <- stations do
@@ -90,7 +98,7 @@ defmodule Nevermore.Network.Ubiquiti.Network do
   end
 
   defp get_wlans_in_group_iter(wlans, current_index, group_id, current_wlans) do
-    if length(wlans) >= current_index do
+    if length(wlans) <= current_index do
       current_wlans
     else
       current_wlan = Enum.at(wlans, current_index)
@@ -102,65 +110,26 @@ defmodule Nevermore.Network.Ubiquiti.Network do
     end
   end
 
-  defp get_wlang_id_by_name(wlangs, name) do
-    get_wlang_id_by_name_iter(wlangs, 0, name)
+  defp get_wlang_id_by_name(jar, wlangs, name) do
+    get_wlang_id_by_name_iter(jar, wlangs, 0, name)
   end
 
-  defp get_wlang_id_by_name_iter(wlangs, current_index, name) do
-    if length(wlangs) >= current_index do
+  defp get_wlang_id_by_name_iter(jar, wlangs, current_index, name) do
+    if length(wlangs) <= current_index do
       nil
     else
       current_wlang = Enum.at(wlangs, current_index)
       if current_wlang["name"] == name do
         current_wlang["_id"]
       else
-        get_wlang_id_by_name_iter(wlangs, current_index + 1, name)
+        get_wlang_id_by_name_iter(jar, wlangs, current_index + 1, name)
       end
     end
   end
 
   defp create_ssid(jar, field_id, ssid, wpa, vlan) do
-    body = """
-    {
-      "bc_filter_enabled":false,
-      "dtim_mode":"default",
-      "group_rekey":3600,
-      "mac_filter_enabled":false,
-      "minrate_ng_enabled":false,
-      "minrate_ng_data_rate_kbps":1000,
-      "minrate_ng_advertising_rates":false,
-      "minrate_ng_cck_rates_enabled":true,
-      "minrate_ng_beacon_rate_kbps":1000,
-      "minrate_ng_mgmt_rate_kbps":1000,
-      "minrate_na_enabled":false,
-      "minrate_na_data_rate_kbps":6000,
-      "minrate_na_advertising_rates":false,
-      "minrate_na_beacon_rate_kbps":6000,
-      "minrate_na_mgmt_rate_kbps":6000,
-      "security":"wpapsk",
-      "wpa_mode":"wpa2",
-      "name":"#{ssid}",
-      "enabled":true,
-      "mcastenhance_enabled":false,
-      "fast_roaming_enabled":false,
-      "vlan_enabled":true,
-      "vlan":#{vlan},
-      "hide_ssid":true,
-      "x_passphrase":#{wpa},
-      "is_guest":false,
-      "uapsd_enabled":false,
-      "name_combine_enabled":true,
-      "name_combine_suffix":"",
-      "no2ghz_oui":false,
-      "radius_mac_auth_enabled":false,
-      "radius_macacl_format":"none_lower",
-      "radius_macacl_empty_password":false,
-      "wlangroup_id":#{field_id},
-      "radius_das_enabled":false,
-      "wpa_enc":"ccmp"
-   }
-   """
+    body = "{ \"bc_filter_enabled\":false, \"dtim_mode\":\"default\", \"group_rekey\":3600, \"mac_filter_enabled\":false, \"minrate_ng_enabled\":false, \"minrate_ng_data_rate_kbps\":1000, \"minrate_ng_advertising_rates\":false, \"minrate_ng_cck_rates_enabled\":true, \"minrate_ng_beacon_rate_kbps\":1000, \"minrate_ng_mgmt_rate_kbps\":1000, \"minrate_na_enabled\":false, \"minrate_na_data_rate_kbps\":6000, \"minrate_na_advertising_rates\":false, \"minrate_na_beacon_rate_kbps\":6000, \"minrate_na_mgmt_rate_kbps\":6000, \"security\":\"wpapsk\", \"wpa_mode\":\"wpa2\", \"name\":\"#{ssid}\", \"enabled\":true, \"mcastenhance_enabled\":false, \"fast_roaming_enabled\":false, \"vlan_enabled\":true, \"vlan\":#{vlan}, \"hide_ssid\":true, \"x_passphrase\":\"#{wpa}\", \"is_guest\":false, \"uapsd_enabled\":false, \"name_combine_enabled\":true, \"name_combine_suffix\":\"\", \"no2ghz_oui\":false, \"radius_mac_auth_enabled\":false, \"radius_macacl_format\":\"none_lower\", \"radius_macacl_empty_password\":false, \"wlangroup_id\":\"#{field_id}\", \"radius_das_enabled\":false, \"wpa_enc\":\"ccmp\" }"
 
-   _ = HTTPoison.post(jar, "https://fms.nevermore:8443/api/s/default/rest/wlangroup", body, @header, hackney: [:insecure])
+   {:ok, res} = HTTPoison.post(jar, "https://fms.nevermore:8443/api/s/default/rest/wlanconf", body, [{"Content-Type", "application/json"}], hackney: [:insecure])
   end
 end
