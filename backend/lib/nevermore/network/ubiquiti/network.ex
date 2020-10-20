@@ -7,6 +7,12 @@ defmodule Nevermore.Network.Ubiquiti.Network do
 
   def router_prestart!(router_password, teams) do
     {:ok, conn} = SSHEx.connect ip: '10.0.100.254', user: 'nevermore', password: router_password
+    case SSHEx.run conn, "/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper begin" do
+          {:ok, _, 0} -> :ok
+          {:ok, _, _} -> :ok
+          {:error, res} -> raise res
+          _ -> raise "Unknown Error"
+    end
     teams
     |> Enum.with_index
     |> Enum.each(fn({team, index}) ->
@@ -21,6 +27,12 @@ defmodule Nevermore.Network.Ubiquiti.Network do
         end
       end)
     end)
+    case SSHEx.run conn, "/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper commit && /opt/vyatta/sbin/vyatta-cfg-cmd-wrapper end" do
+          {:ok, _, 0} -> :ok
+          {:ok, _, _} -> :ok
+          {:error, res} -> raise res
+          _ -> raise "Unknown Error"
+        end
   end
 
   def configure_wifi!(controller_username, controller_password, stations) do
