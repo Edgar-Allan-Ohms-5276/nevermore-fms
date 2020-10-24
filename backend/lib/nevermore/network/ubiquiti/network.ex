@@ -6,7 +6,7 @@ defmodule Nevermore.Network.Ubiquiti.Network do
   alias CookieJar.HTTPoison, as: HTTPoison
 
   def router_prestart!(router_password, teams) do
-    {:ok, conn} = SSHEx.connect ip: '10.0.100.254', user: 'nevermore', password: router_password
+    {:ok, conn} = SSHEx.connect ip: '10.0.100.254', user: 'nevermore', password: router_password, negotiation_timeout: 60000
     case SSHEx.run conn, "/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper begin" do
           {:ok, _, 0} -> :ok
           {:ok, _, _} -> :ok
@@ -25,14 +25,21 @@ defmodule Nevermore.Network.Ubiquiti.Network do
           {:error, res} -> raise res
           _ -> raise "Unknown Error"
         end
+        IO.puts(command <> "\n")
       end)
     end)
-    case SSHEx.run conn, "/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper commit && /opt/vyatta/sbin/vyatta-cfg-cmd-wrapper end" do
+    case SSHEx.run conn, "/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper commit" do
           {:ok, _, 0} -> :ok
           {:ok, _, _} -> :ok
           {:error, res} -> raise res
           _ -> raise "Unknown Error"
-        end
+    end
+    case SSHEx.run conn, "/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper end" do
+          {:ok, _, 0} -> :ok
+          {:ok, _, _} -> :ok
+          {:error, res} -> raise res
+          _ -> raise "Unknown Error"
+    end
   end
 
   def configure_wifi!(controller_username, controller_password, stations) do
@@ -67,7 +74,11 @@ defmodule Nevermore.Network.Ubiquiti.Network do
 
   defp get_router_command(station, team_num) do
     ip_middle = to_string(div(team_num, 100)) <> "." <> to_string(rem(team_num, 100))
-    vlan = station * 10
+    vlan = if station > 2 do
+      station - 2 + 20
+    else
+      station + 11
+    end
     station_name = if station <= 3 do
       "RED#{station}"
     else
@@ -76,7 +87,6 @@ defmodule Nevermore.Network.Ubiquiti.Network do
 
     EEx.eval_string(
 "
-<%= cw %> begin
 <%= cw %> delete interfaces ethernet eth0 vif <%= vlan %>
 <%= cw %> set interfaces ethernet eth0 vif <%= vlan %> description <%= station_name %>
 <%= cw %> set interfaces ethernet eth0 vif <%= vlan %> address 10.<%= ip_middle %>.254/24
@@ -87,8 +97,6 @@ defmodule Nevermore.Network.Ubiquiti.Network do
 <%= cw %> set service dhcp-server shared-network-name <%= station_name %> subnet 10.<%= ip_middle %>.0/24 start 10.<%= ip_middle %>.50 stop 10.<%= ip_middle %>.150
 <%= cw %> set service dhcp-server shared-network-name <%= station_name %> subnet 10.<%= ip_middle %>.0/24 default-router 10.<%= ip_middle %>.254
 <%= cw %> set service dhcp-server shared-network-name <%= station_name %> authoritative enable
-<%= cw %> commit
-<%= cw %> end
 ", cw: "/opt/vyatta/sbin/vyatta-cfg-cmd-wrapper", ip_middle: ip_middle, vlan: vlan, station_name: station_name)
   end
 
