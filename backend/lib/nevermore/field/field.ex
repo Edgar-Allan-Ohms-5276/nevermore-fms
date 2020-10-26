@@ -156,20 +156,28 @@ defmodule Nevermore.Field do
 
     state =
       if Map.has_key?(state.team_num_to_alliance_station, team_num) do
-        send(
-          driverstation,
-          {:send_info, Enums.status_good(), state.team_num_to_alliance_station[team_num]}
-        )
-
-        new_alliance_map =
-          Map.put(
-            state.alliance_station_to_driverstation,
-            state.team_num_to_alliance_station[team_num],
-            driverstation
+        {_, first_two, last_two, _} = Nevermore.Driverstation.get_ip(driverstation)
+        if first_two * 100 + last_two == team_num do
+          send(
+            driverstation,
+            {:send_info, Enums.status_good(), state.team_num_to_alliance_station[team_num]}
           )
 
-        state = Map.put(state, :alliance_station_to_driverstation, new_alliance_map)
-        state
+          new_alliance_map =
+            Map.put(
+              state.alliance_station_to_driverstation,
+              state.team_num_to_alliance_station[team_num],
+              driverstation
+            )
+
+          state = Map.put(state, :alliance_station_to_driverstation, new_alliance_map)
+          state
+        else
+          send(
+            driverstation,
+            {:send_info, Enums.status_bad(), state.team_num_to_alliance_station[team_num]}
+          )
+        end
       else
         send(driverstation, {:send_info, Enums.status_waiting(), Enums.red1()})
         state

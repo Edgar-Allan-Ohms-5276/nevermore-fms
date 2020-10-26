@@ -223,6 +223,12 @@ defmodule Nevermore.Driverstation do
     {:stop, :normal, state}
   end
 
+  def handle_call(:get_ip, _from, state) do
+    {:ok, {ip, _}} = :inet.peername(state.socket)
+
+    {:reply, ip, state}
+  end
+
   defp get_current_mode(time_left, match_level) do
     if match_level == Enums.level_test() do
       Enums.mode_test()
@@ -300,5 +306,13 @@ defmodule Nevermore.Driverstation do
   @spec kick(pid()) :: none()
   def kick(ds) do
     send(ds, :kick)
+  end
+
+  @doc """
+    Gets the IP address of the driverstation.
+  """
+  @spec get_ip(pid()) :: tuple()
+  def get_ip(driverstation) do
+    GenServer.call(driverstation, :get_ip)
   end
 end

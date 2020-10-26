@@ -74,10 +74,10 @@ defmodule Nevermore.Network.Ubiquiti.Network do
 
   defp get_router_command(station, team_num) do
     ip_middle = to_string(div(team_num, 100)) <> "." <> to_string(rem(team_num, 100))
-    vlan = if station > 2 do
-      station - 2 + 20
+    vlan = if station > 3 do
+      station - 3 + 20
     else
-      station + 11
+      station + 10
     end
     station_name = if station <= 3 do
       "RED#{station}"
