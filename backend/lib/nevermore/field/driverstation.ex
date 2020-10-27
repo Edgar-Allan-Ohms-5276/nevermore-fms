@@ -274,6 +274,10 @@ defmodule Nevermore.Driverstation do
     end
   end
 
+  def terminate(reason, _) do
+    IO.puts(reason)
+  end
+
   # Helper Functions
 
   @doc """
