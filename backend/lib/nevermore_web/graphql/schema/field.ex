@@ -23,6 +23,11 @@ defmodule NevermoreWeb.GraphQL.Field do
     field :station, :station
   end
 
+  enum :side do
+    value(:red, as: :red)
+    value(:blue, as: :blue)
+  end
+
   enum :station do
     value(:red1, as: 0)
     value(:red2, as: 1)
@@ -146,12 +151,25 @@ defmodule NevermoreWeb.GraphQL.Field do
           {:error, "Not Authenticated"}
         end
       end)
+
+      field :send_game_data, :success do
+        arg(:side, non_null(:side))
+        arg(:data, :string)
+
+        resolve(fn args, res ->
+          if Map.has_key?(res.context, :user) do
+            Nevermore.Field.send_game_data_to_side(args.side, args.data)
+
+            {:ok, %{successful: true}}
+          else
+            {:error, "Not Authenticated"}
+          end
+        end)
     end
   end
 
   object :field_subscriptions do
     field :field_state_update, :field_state do
-
       config(fn _, _ ->
         {:ok, topic: "field_state_update"}
       end)

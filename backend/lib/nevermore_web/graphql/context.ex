@@ -8,8 +8,9 @@ defmodule NevermoreWeb.GraphQL.Context do
   def call(conn, _) do
     case build_context(conn) do
       {:ok, context} ->
-      IO.puts(inspect(context))
+        IO.puts(inspect(context))
         put_private(conn, :absinthe, %{context: context})
+
       thing ->
         IO.puts(inspect(inspect(thing)))
         conn
@@ -27,11 +28,13 @@ defmodule NevermoreWeb.GraphQL.Context do
     case Phoenix.Token.verify(NevermoreWeb.Endpoint, "user auth", token, max_age: 86400) do
       {:ok, user_id} ->
         user = Nevermore.Repo.get(Nevermore.Accounts.User, user_id)
+
         if user != nil do
           {:ok, user}
         else
           {:error, "Invalid Token"}
         end
+
       _ ->
         {:error, "Invalid Token"}
     end

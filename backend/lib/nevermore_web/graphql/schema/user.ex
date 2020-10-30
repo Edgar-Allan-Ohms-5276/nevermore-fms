@@ -3,7 +3,7 @@ defmodule NevermoreWeb.GraphQL.User do
   use Absinthe.Relay.Schema.Notation, :classic
   import NevermoreWeb.Errors, only: [handle_errors: 1]
 
-  node object :user do
+  node object(:user) do
     field :name, :string
     field :email, :string
   end

@@ -157,6 +157,7 @@ defmodule Nevermore.Field do
     state =
       if Map.has_key?(state.team_num_to_alliance_station, team_num) do
         {_, first_two, last_two, _} = Nevermore.Driverstation.get_ip(driverstation)
+
         if first_two * 100 + last_two == team_num do
           send(
             driverstation,
@@ -177,6 +178,7 @@ defmodule Nevermore.Field do
             driverstation,
             {:send_info, Enums.status_bad(), state.team_num_to_alliance_station[team_num]}
           )
+          state
         end
       else
         send(driverstation, {:send_info, Enums.status_waiting(), Enums.red1()})
@@ -246,11 +248,20 @@ defmodule Nevermore.Field do
 
     spawn(fn ->
       IO.puts("here1")
-      Nevermore.Network.Ubiquiti.Network.router_prestart!("yeetbread", [red1, red2, red3, blue1, blue2, blue3])
+
+      Nevermore.Network.Ubiquiti.Network.router_prestart!("yeetbread", [
+        red1,
+        red2,
+        red3,
+        blue1,
+        blue2,
+        blue3
+      ])
     end)
 
     spawn(fn ->
       IO.puts("here2")
+
       Nevermore.Network.Ubiquiti.Network.configure_wifi!("nevermore", "yeetbread", [
         {red1, "Nevermore#{red1}", "Nevermore#{red1}", 11},
         {red2, "Nevermore#{red2}", "Nevermore#{red2}", 12},
@@ -386,13 +397,6 @@ defmodule Nevermore.Field do
   end
 
   @doc """
-  Returns the field state
-  """
-  def handle_call(:get_field, _from, state) do
-    {:reply, state, state}
-  end
-
-  @doc """
   Sets a key in the state
   """
   def handle_info({:set_state_key, key, value}, state) do
@@ -478,6 +482,29 @@ defmodule Nevermore.Field do
     {:noreply, state}
   end
 
+  def handle_info({:send_game_data_to_side, side, game_data}, state) do
+    if side == :red do
+      Enum.each(state.alliance_station_to_driverstation, fn {station, driverstation} ->
+        if driverstation != nil && station < 3 do
+          Nevermore.Driverstation.send_game_data(driverstation, game_data)
+        end
+      end)
+    else
+      Enum.each(state.alliance_station_to_driverstation, fn {station, driverstation} ->
+        if driverstation != nil && station >= 3 do
+          Nevermore.Driverstation.send_game_data(driverstation, game_data)
+        end
+      end)
+    end
+  end
+
+  @doc """
+  Returns the field state
+  """
+  def handle_call(:get_field, _from, state) do
+    {:reply, state, state}
+  end
+
   defp all_driverstations_ready?(state) do
     try do
       Enum.each(state.alliance_station_to_driverstation, fn {_, driverstation} ->
@@ -551,7 +578,7 @@ defmodule Nevermore.Field do
           integer(),
           integer(),
           integer()
-        ) :: none()
+        ) :: :ok
   def setup_field(match_num, tournament_level, red1, red2, red3, blue1, blue2, blue3) do
     send(
       Nevermore.Field,
@@ -568,7 +595,7 @@ defmodule Nevermore.Field do
   Returns:
     Nothing
   """
-  @spec start_field() :: none()
+  @spec start_field() :: :ok
   def start_field() do
     send(Nevermore.Field, :start_field)
   end
@@ -586,7 +613,7 @@ defmodule Nevermore.Field do
   Returns:
     Nothing
   """
-  @spec stop_field() :: none()
+  @spec stop_field() :: :ok
   def stop_field() do
     send(Nevermore.Field, {:stop_field, true})
   end
@@ -600,7 +627,7 @@ defmodule Nevermore.Field do
   Returns:
     Nothing
   """
-  @spec pause_field() :: none()
+  @spec pause_field() :: :ok
   def pause_field() do
     send(Nevermore.Field, :pause_field)
   end
@@ -614,8 +641,22 @@ defmodule Nevermore.Field do
   Returns:
     Nothing
   """
-  @spec unpause_field() :: none()
+  @spec unpause_field() :: :ok
   def unpause_field() do
     send(Nevermore.Field, :unpause_field)
+  end
+
+  @doc """
+  This unpauses the match.
+
+  Parameters:
+      * `field`: This is the pid to the field you want to unpause.
+
+  Returns:
+    Nothing
+  """
+  @spec send_game_data_to_side(atom(), String.t) :: :ok
+  def send_game_data_to_side(side, game_data) do
+    send(Nevermore.Field, {:send_game_data_to_side, side, game_data})
   end
 end

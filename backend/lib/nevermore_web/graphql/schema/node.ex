@@ -6,43 +6,43 @@ defmodule NevermoreWeb.GraphQL.Node do
   use Absinthe.Schema.Notation
   use Absinthe.Relay.Schema.Notation, :classic
 
-    node interface do
-      resolve_type(fn
-        %{sponsors: _, school: _}, _ ->
-          :team
+  node interface do
+    resolve_type(fn
+      %{sponsors: _, school: _}, _ ->
+        :team
 
-        %{teams: _, name: _}, _ ->
-          :alliance
+      %{teams: _, name: _}, _ ->
+        :alliance
 
-        %{e_stopped: _, station: _}, _ ->
-          :driverstation
+      %{e_stopped: _, station: _}, _ ->
+        :driverstation
 
-        %{udp_port: _, event_name: _}, _ ->
-          :field
+      %{udp_port: _, event_name: _}, _ ->
+        :field
 
-        %{start_time: _, end_time: _, schedule: _}, _ ->
-          :match
+      %{start_time: _, end_time: _, schedule: _}, _ ->
+        :match
 
-        %{occurred_at: _, type: _, alliance_change: _}, _ ->
-          :match_event
+      %{occurred_at: _, type: _, alliance_change: _}, _ ->
+        :match_event
 
-        %{occurred_at: _, type: _}, _ ->
-          :match_penalty
+      %{occurred_at: _, type: _}, _ ->
+        :match_penalty
 
-        %{scheduled_matches: _, name: _}, _ ->
-          :schedule
+      %{scheduled_matches: _, name: _}, _ ->
+        :schedule
 
-        %{schedule: _, red_station: _}, _ ->
-          :scheduled_match
+      %{schedule: _, red_station: _}, _ ->
+        :scheduled_match
 
-        %{side: _, station_one: _}, _ ->
-          :station_assignment
+      %{side: _, station_one: _}, _ ->
+        :station_assignment
 
-        %{email: _, name: _}, _ ->
-          :user
+      %{email: _, name: _}, _ ->
+        :user
 
-        _, _ ->
-          nil
-      end)
-    end
+      _, _ ->
+        nil
+    end)
+  end
 end

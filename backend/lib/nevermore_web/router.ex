@@ -14,6 +14,7 @@ defmodule NevermoreWeb.Router do
     pipe_through :graphql
 
     forward "/graphql", Absinthe.Plug, schema: NevermoreWeb.GraphQL
+
     forward "/playground",
             Absinthe.Plug.GraphiQL,
             schema: NevermoreWeb.GraphQL,

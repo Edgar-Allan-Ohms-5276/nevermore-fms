@@ -44,6 +44,25 @@ defmodule Nevermore.Driverstation do
      }}
   end
 
+  def send_event_name(event_name) do
+    packet = <<>>
+
+    packet = packet <> <<0x14>>
+    packet = packet <> <<String.length(event_name)>>
+    packet = packet <> event_name
+
+    send(self(), {:send_tcp_packet, packet})
+  end
+
+  def send_station_info(status, station) do
+    packet = <<>>
+    packet = packet <> <<0x19>>
+    packet = packet <> <<station>>
+    packet = packet <> <<status>>
+
+    send(self(), {:send_tcp_packet, packet})
+  end
+
   def handle_info({:tcp, _socket, packet}, state) do
     if Enum.at(packet, 2) == 0x18 do
       team_num = (Enum.at(packet, 3) <<< 8) + Enum.at(packet, 4)
@@ -81,32 +100,6 @@ defmodule Nevermore.Driverstation do
 
     send(self(), {:send_tcp_packet, packet})
     {:noreply, state}
-  end
-
-  def send_event_name(event_name) do
-    packet = <<>>
-
-    packet = packet <> <<0x14>>
-    packet = packet <> <<String.length(event_name)>>
-    packet = packet <> event_name
-
-    send(self(), {:send_tcp_packet, packet})
-  end
-
-  def send_station_info(status, station) do
-    packet = <<>>
-    packet = packet <> <<0x19>>
-    packet = packet <> <<station>>
-    packet = packet <> <<status>>
-
-    send(self(), {:send_tcp_packet, packet})
-  end
-
-  @doc """
-  Returns the driverstation's state
-  """
-  def handle_call(:get_driverstation, _from, state) do
-    {:reply, state, state}
   end
 
   @doc """
@@ -229,6 +222,13 @@ defmodule Nevermore.Driverstation do
     {:reply, ip, state}
   end
 
+  @doc """
+  Returns the driverstation's state
+  """
+  def handle_call(:get_driverstation, _from, state) do
+    {:reply, state, state}
+  end
+
   defp get_current_mode(time_left, match_level) do
     if match_level == Enums.level_test() do
       Enums.mode_test()
@@ -283,7 +283,7 @@ defmodule Nevermore.Driverstation do
   @doc """
   Returns the state of the DS.
   """
-  @spec get_state(pid()) :: none()
+  @spec get_state(pid()) :: :ok
   def get_state(ds) do
     GenServer.call(ds, :get_driverstation)
   end
@@ -291,7 +291,7 @@ defmodule Nevermore.Driverstation do
   @doc """
   Sets the enabled value for the driverstation, if true the robot is enabled.
   """
-  @spec set_enabled(pid(), atom()) :: none()
+  @spec set_enabled(pid(), atom()) :: :ok
   def set_enabled(ds, enabled) do
     send(ds, {:set_state_key, :enabled, enabled})
   end
@@ -299,7 +299,7 @@ defmodule Nevermore.Driverstation do
   @doc """
   Sets the e_stop value for the driverstation, if true the robot is e_stopped.
   """
-  @spec set_e_stopped(pid(), atom()) :: none()
+  @spec set_e_stopped(pid(), atom()) :: :ok
   def set_e_stopped(ds, e_stopped) do
     send(ds, {:set_state_key, :e_stopped, e_stopped})
   end
@@ -307,7 +307,7 @@ defmodule Nevermore.Driverstation do
   @doc """
   Kicks the driverstation.
   """
-  @spec kick(pid()) :: none()
+  @spec kick(pid()) :: :ok
   def kick(ds) do
     send(ds, :kick)
   end
@@ -318,5 +318,13 @@ defmodule Nevermore.Driverstation do
   @spec get_ip(pid()) :: tuple()
   def get_ip(driverstation) do
     GenServer.call(driverstation, :get_ip)
+  end
+
+  @doc """
+    Sends game data to the driverstation.
+  """
+  @spec send_game_data(pid(), String.t) :: :ok
+  def send_game_data(driverstation, game_data) do
+    send(driverstation, {:send_game_data, game_data})
   end
 end
