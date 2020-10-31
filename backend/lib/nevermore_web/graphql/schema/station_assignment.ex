@@ -26,8 +26,8 @@ defmodule NevermoreWeb.GraphQL.StationAssignment do
   end
 
   enum :side do
-    value(:red, as: "r")
-    value(:blue, as: "b")
+    value(:red, as: :red)
+    value(:blue, as: :blue)
   end
 
   object :station_assignment_queries do
