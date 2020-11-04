@@ -52,12 +52,8 @@ defmodule NevermoreWeb.GraphQL.Driverstation do
         if Map.has_key?(res.context, :user) do
           driverstation = get_driverstation_by_team(team_number)
 
-          if driverstation != nil do
-            Nevermore.Driverstation.set_enabled(driverstation, enabled)
-            {:ok, %{successful: true}}
-          else
-            {:error, "That team is not connected to the field or is not in this match."}
-          end
+          Nevermore.Field.set_enabled(team_number, enabled)
+          {:ok, %{successful: true}}
         else
           {:error, "Not Authenticated"}
         end
@@ -70,14 +66,9 @@ defmodule NevermoreWeb.GraphQL.Driverstation do
 
       resolve(fn %{team_number: team_number, emergency_stop: emergency_stop}, res ->
         if Map.has_key?(res.context, :user) do
-          driverstation = get_driverstation_by_team(team_number)
+          Nevermore.Field.set_e_stopped(team_number, emergency_stop)
 
-          if driverstation != nil do
-            Nevermore.Driverstation.set_e_stopped(driverstation, emergency_stop)
-            {:ok, %{successful: true}}
-          else
-            {:error, "That team is not connected to the field or is not in this match."}
-          end
+          {:ok, %{successful: true}}
         else
           {:error, "Not Authenticated"}
         end

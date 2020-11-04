@@ -16,6 +16,7 @@ defmodule NevermoreWeb.GraphQL.Team do
 
   node object(:team) do
     field :name, :string
+    field :team_number, :integer
     field :logo_url, :string
     field :song_url, :string
     field :sponsors, list_of(:string)

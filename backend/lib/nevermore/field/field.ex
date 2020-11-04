@@ -19,13 +19,14 @@ defmodule Nevermore.Field do
             tcp_error: nil,
             udp_error: nil,
             match_num: 0,
-            match_state: 0,
+            match_state: Enums.state_notready(),
             time_left: 0,
             event_name: "",
             match_level: 0,
             match_started_at: 0,
             alliance_station_to_driverstation: %{},
             team_num_to_alliance_station: %{},
+            team_num_to_state: %{},
             driver_stations: []
 
   use GenServer
@@ -69,6 +70,19 @@ defmodule Nevermore.Field do
      }}
   end
 
+  @spec start_tcp_server(
+          atom
+          | binary
+          | char_list
+          | integer
+          | {false, non_neg_integer}
+          | {:local, binary | char_list}
+          | {true, non_neg_integer}
+          | {byte, byte, byte, byte}
+          | {char, char, char, char, char, char, char, char},
+          char,
+          atom | pid | port | {atom, atom}
+        ) :: nil
   def start_tcp_server(ip, port, field) do
     socket =
       case :gen_tcp.listen(port, [:list, ip: ip]) do
@@ -240,6 +254,75 @@ defmodule Nevermore.Field do
         Map.put(alliance_station_to_driverstation, Enums.blue3(), nil)
       end
 
+    alliance_station_to_driverstation = %{}
+
+    alliance_station_to_driverstation =
+      if red1 != nil || red1 != 0 do
+        Map.put(alliance_station_to_driverstation, Enums.red1(), nil)
+      end
+
+    alliance_station_to_driverstation =
+      if red2 != nil || red2 != 0 do
+        Map.put(alliance_station_to_driverstation, Enums.red2(), nil)
+      end
+
+    alliance_station_to_driverstation =
+      if red3 != nil || red3 != 0 do
+        Map.put(alliance_station_to_driverstation, Enums.red3(), nil)
+      end
+
+    alliance_station_to_driverstation =
+      if blue1 != nil || blue1 != 0 do
+        Map.put(alliance_station_to_driverstation, Enums.blue1(), nil)
+      end
+
+    alliance_station_to_driverstation =
+      if blue2 != nil || blue2 != 0 do
+        Map.put(alliance_station_to_driverstation, Enums.blue2(), nil)
+      end
+
+    alliance_station_to_driverstation =
+      if blue3 != nil || blue3 != 0 do
+        Map.put(alliance_station_to_driverstation, Enums.blue3(), nil)
+      end
+
+    team_num_to_state = %{}
+    default_state = %{
+      enabled: true,
+      e_stopped: false
+    }
+
+    team_num_to_state =
+      if red1 != nil || red1 != 0 do
+        Map.put(team_num_to_state, red1, default_state)
+      end
+
+    team_num_to_state =
+      if red2 != nil || red2 != 0 do
+        Map.put(team_num_to_state, red2, default_state)
+      end
+
+    team_num_to_state =
+      if red3 != nil || red3 != 0 do
+        Map.put(team_num_to_state, red3, default_state)
+      end
+
+    team_num_to_state =
+      if blue1 != nil || blue1 != 0 do
+        Map.put(team_num_to_state, blue1, default_state)
+      end
+
+    team_num_to_state =
+      if blue2 != nil || blue2 != 0 do
+        Map.put(team_num_to_state, blue2, default_state)
+      end
+
+    team_num_to_state =
+      if blue3 != nil || blue3 != 0 do
+        Map.put(team_num_to_state, blue3, default_state)
+      end
+
+    state = Map.put(state, :team_num_to_state, team_num_to_state)
     state = Map.put(state, :team_num_to_alliance_station, new_team_to_station)
     state = Map.put(state, :alliance_station_to_driverstation, alliance_station_to_driverstation)
     state = Map.put(state, :match_num, match_num)
@@ -247,7 +330,6 @@ defmodule Nevermore.Field do
     state = Map.put(state, :match_state, Enums.state_notready())
 
     spawn(fn ->
-      IO.puts("here1")
 
       Nevermore.Network.Ubiquiti.Network.router_prestart!("yeetbread", [
         red1,
@@ -260,7 +342,6 @@ defmodule Nevermore.Field do
     end)
 
     spawn(fn ->
-      IO.puts("here2")
 
       Nevermore.Network.Ubiquiti.Network.configure_wifi!("nevermore", "yeetbread", [
         {red1, "Nevermore#{red1}", "Nevermore#{red1}", 11},
@@ -380,8 +461,14 @@ defmodule Nevermore.Field do
   """
   def handle_info(:pause_field, state) do
     original_state = state
-    state = Map.put(state, :match_state, Enums.state_paused())
+    state = if state.match_state == Enums.state_started() do
+      Map.put(state, :match_state, Enums.state_paused())
+    else
+      state
+    end
+
     check_state_and_publish(original_state, state)
+
     {:noreply, state}
   end
 
@@ -390,7 +477,12 @@ defmodule Nevermore.Field do
   """
   def handle_info(:unpause_field, state) do
     original_state = state
-    state = Map.put(state, :match_state, Enums.state_started())
+    state = if state.match_state == Enums.state_paused() do
+      Map.put(state, :match_state, Enums.state_started())
+    else
+      state
+    end
+
     check_state_and_publish(original_state, state)
 
     {:noreply, state}
@@ -403,6 +495,26 @@ defmodule Nevermore.Field do
     original_state = state
     state = Map.put(state, key, value)
     check_state_and_publish(original_state, state)
+    {:noreply, state}
+  end
+
+  @doc """
+  Sets a key in the ds state
+  """
+  def handle_info({:set_team_state_key, team_num, key, value}, state) do
+    original_state = state
+
+    state = if Map.has_key?(state.team_num_to_state, team_num) do
+      team_state = state.team_num_to_state[team_num]
+      team_state = Map.put(team_state, key, value)
+      team_num_to_state = Map.put(state.team_num_to_state, team_num, team_state)
+      Map.put(state, :team_num_to_state, team_num_to_state)
+    else
+      state
+    end
+
+    check_state_and_publish(original_state, state)
+
     {:noreply, state}
   end
 
@@ -467,12 +579,14 @@ defmodule Nevermore.Field do
         end
       end
 
-    Enum.each(state.alliance_station_to_driverstation, fn {_, driverstation} ->
+    Enum.each(state.alliance_station_to_driverstation, fn {station, driverstation} ->
       if driverstation != nil do
+        team_num = state.alliance_station_to_team_num[station]
+        ds_state = state.team_num_to_state[team_num]
         send(
           driverstation,
           {:tick, state.match_state, state.time_left, state.match_level, state.match_num,
-           state.udp_socket}
+           state.udp_socket, ds_state.enabled, ds_state.e_stopped}
         )
       end
     end)
@@ -658,5 +772,15 @@ defmodule Nevermore.Field do
   @spec send_game_data_to_side(atom(), String.t) :: :ok
   def send_game_data_to_side(side, game_data) do
     send(Nevermore.Field, {:send_game_data_to_side, side, game_data})
+  end
+
+  @spec set_enabled(number(), boolean()) :: :ok
+  def set_enabled(team_num, enabled) do
+    send(Nevermore.Field, {:set_team_state_key, team_num, :enabled, enabled})
+  end
+
+  @spec set_e_stopped(number(), boolean()) :: :ok
+  def set_e_stopped(team_num, e_stopped) do
+    send(Nevermore.Field, {:set_team_state_key, team_num, :e_stopped, e_stopped})
   end
 end

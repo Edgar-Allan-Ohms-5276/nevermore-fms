@@ -14,6 +14,7 @@ defmodule NevermoreWeb.GraphQL.Field do
     field :event_name, :string
     field :match_level, :match_level
     field :team_num_to_alliance_station, list_of(:team_num_to_alliance_station)
+    field :team_num_to_state, list_of(:team_state)
     field :match_started_at, :integer
     # field :driver_stations, list TODO
   end
@@ -21,6 +22,12 @@ defmodule NevermoreWeb.GraphQL.Field do
   object :team_num_to_alliance_station do
     field :team, :team
     field :station, :station
+  end
+
+  object :team_state do
+    field :team, :team
+    field :enabled, :boolean
+    field :e_stopped, :boolean
   end
 
   enum :station do
@@ -58,13 +65,27 @@ defmodule NevermoreWeb.GraphQL.Field do
           team_num_to_alliance_station =
             Enum.reduce(state.team_num_to_alliance_station, [], fn {team, station}, list ->
               if team != nil do
-                list ++ [%{team: Nevermore.Repo.get(Nevermore.Team, team), station: station}]
+                team_info = Nevermore.Repo.get(Nevermore.Team, team)
+                team_info = if (team_info != nil), do: team_info, else: %{}
+                list ++ [%{team: Map.merge(%{team_number: team}, team_info), station: station}]
               else
                 list
               end
             end)
 
+            team_num_to_state =
+              Enum.reduce(state.team_num_to_state, [], fn {team, state}, list ->
+                if team != nil do
+                  team_info = Nevermore.Repo.get(Nevermore.Team, team)
+                  team_info = if (team_info != nil), do: team_info, else: %{}
+                  list ++ [%{team: Map.merge(%{team_number: team}, team_info), e_stopped: state.e_stopped, enabled: state.enabled}]
+                else
+                  list
+                end
+              end)
+
           state = Map.put(state, :ip, :inet.ntoa(state.ip))
+          state = Map.put(state, :team_num_to_state, team_num_to_state)
           {:ok, Map.put(state, :team_num_to_alliance_station, team_num_to_alliance_station)}
         else
           {:error, "Not Authenticated"}

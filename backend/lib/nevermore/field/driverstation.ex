@@ -15,13 +15,11 @@ defmodule Nevermore.Driverstation do
             status: 0,
             station: 0,
             # Set this value if you want to emergency stop the robot.
-            e_stopped: false,
             request_e_stopped: false,
             comms: false,
             radio_ping: false,
             rio_ping: false,
             # The tick loop automatically detects if the robot should be enabled according to the time, this is what is used to manually disable the robot.
-            enabled: true,
             battery_voltage: 0.0,
             udp_sequence_num: 0,
             last_udp_message_time: 0
@@ -140,7 +138,7 @@ defmodule Nevermore.Driverstation do
     {:noreply, state}
   end
 
-  def handle_info({:tick, match_state, time_left, match_level, match_num, udp_socket}, state) do
+  def handle_info({:tick, match_state, time_left, match_level, match_num, udp_socket, enabled, e_stopped}, state) do
     original_state = state
 
     if Duration.diff(Duration.now(), state.last_udp_message_time, :seconds) > 10 do
@@ -152,12 +150,12 @@ defmodule Nevermore.Driverstation do
       enabled =
         if !should_be_enabled(match_state, time_left) do
           if match_level == Enums.level_test() do
-            state.enabled
+            enabled
           else
             false
           end
         else
-          state.enabled
+          enabled
         end
 
       # Get the current mode the ds should be in
@@ -176,7 +174,7 @@ defmodule Nevermore.Driverstation do
         <<state.udp_sequence_num >>> 8 &&& 0xFF>> <>
           <<state.udp_sequence_num &&& 0xFF>> <>
           <<0x00>> <>
-          <<(boolean_to_integer(state.e_stopped) <<< 7) + (boolean_to_integer(enabled) <<< 2) +
+          <<(boolean_to_integer(e_stopped) <<< 7) + (boolean_to_integer(enabled) <<< 2) +
               mode>> <>
           <<0x00>> <>
           <<state.station>> <>
@@ -286,22 +284,6 @@ defmodule Nevermore.Driverstation do
   @spec get_state(pid()) :: :ok
   def get_state(ds) do
     GenServer.call(ds, :get_driverstation)
-  end
-
-  @doc """
-  Sets the enabled value for the driverstation, if true the robot is enabled.
-  """
-  @spec set_enabled(pid(), atom()) :: :ok
-  def set_enabled(ds, enabled) do
-    send(ds, {:set_state_key, :enabled, enabled})
-  end
-
-  @doc """
-  Sets the e_stop value for the driverstation, if true the robot is e_stopped.
-  """
-  @spec set_e_stopped(pid(), atom()) :: :ok
-  def set_e_stopped(ds, e_stopped) do
-    send(ds, {:set_state_key, :e_stopped, e_stopped})
   end
 
   @doc """
