@@ -26,6 +26,7 @@ defmodule Nevermore.Field do
             match_started_at: 0,
             alliance_station_to_driverstation: %{},
             team_num_to_alliance_station: %{},
+            alliance_station_to_team_num: %{},
             team_num_to_state: %{},
             driver_stations: []
 
@@ -222,6 +223,14 @@ defmodule Nevermore.Field do
     new_team_to_station = Map.put(new_team_to_station, blue2, Enums.blue2())
     new_team_to_station = Map.put(new_team_to_station, blue3, Enums.blue3())
 
+    station_to_new_team = %{}
+    station_to_new_team = Map.put(station_to_new_team, Enums.red1(), red1)
+    station_to_new_team = Map.put(station_to_new_team, Enums.red2(), red2)
+    station_to_new_team = Map.put(station_to_new_team, Enums.red3(), red3)
+    station_to_new_team = Map.put(station_to_new_team, Enums.blue1(), blue1)
+    station_to_new_team = Map.put(station_to_new_team, Enums.blue2(), blue2)
+    station_to_new_team = Map.put(station_to_new_team, Enums.blue3(), blue3)
+
     # You can blame immutability for the terrible code that is about to be written
     alliance_station_to_driverstation = %{}
 
@@ -325,6 +334,7 @@ defmodule Nevermore.Field do
 
     state = Map.put(state, :team_num_to_state, team_num_to_state)
     state = Map.put(state, :team_num_to_alliance_station, new_team_to_station)
+    state = Map.put(state, :alliance_station_to_team_num, station_to_new_team)
     state = Map.put(state, :alliance_station_to_driverstation, alliance_station_to_driverstation)
     state = Map.put(state, :match_num, match_num)
     state = Map.put(state, :match_level, tournament_level)
