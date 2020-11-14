@@ -170,6 +170,7 @@ defmodule Nevermore.Field do
 
     state =
       if Map.has_key?(state.team_num_to_alliance_station, team_num) do
+        IO.puts("runs Here")
         {_, first_two, last_two, _} = Nevermore.Driverstation.get_ip(driverstation)
 
         if first_two * 100 + last_two == team_num do
